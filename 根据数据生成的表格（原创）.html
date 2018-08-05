@@ -1,0 +1,394 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>根据数据生成的表格（原创）-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+@import "https://cdn.bootcss.com/antd/3.4.1/antd.css";
+	.table {
+	border:1px solid #ddd;
+}
+.table  table {
+	width:100%;
+}
+.table table .checkbox {
+	cursor:pointer;
+}
+.inputul {
+	width:300px;
+	min-height:25px;
+	border:1px solid #000;
+	border-radius:3px;
+	float:left;
+}
+.inputul li {
+	float:left;
+	display:inline;
+	border:1px solid #000;
+	margin:2px 5px;
+}
+</style>
+</head>
+<body>
+<div class="table"></div>
+
+<button>重新填充表格数据</button>
+
+<script>
+var xxx = {
+    "Remarks": [{
+            "column_name": "ColChName",
+            "column_comment": "名字",
+            "EditMode": "input"
+        },
+        {
+            "column_name": "Type",
+            "column_comment": "类型",
+            "EditMode": "select",
+            "selectoption": [{
+                    "Type": "int"
+                },
+                {
+                    "Type": "varchar"
+                },
+                {
+                    "Type": "text"
+                },
+                {
+                    "Type": "blob"
+                },
+                {
+                    "Type": "longtext"
+                },
+                {
+                    "Type": "datetime"
+                }
+            ]
+        },
+        {
+            "column_name": "Length",
+            "column_comment": "长度",
+            "EditMode": "input"
+        },
+        {
+            "column_name": "EditMode",
+            "column_comment": "编辑方式",
+            "EditMode": "select",
+            "selectoption": [{
+                    "EditMode": "noneditable",
+                    "Context": "noneditable"
+                },
+                {
+                    "EditMode": "input",
+                    "Context": "输入"
+                },
+                {
+                    "EditMode": "select",
+                    "Context": "选择"
+                },
+                {
+                    "EditMode": "richText",
+                    "Context": "文本"
+                },
+                {
+                    "EditMode": "date",
+                    "Context": "??￥???"
+                },
+                {
+                    "EditMode": "upload",
+                    "Context": "上传"
+                },
+                {
+                    "EditMode": "byService",
+                    "Context": "服务器"
+                }
+            ]
+        },
+        {
+            "column_name": "IsShow",
+            "column_comment": "展示",
+            "EditMode": "展示"
+        }
+    ],
+    "Columns": [{
+            "ColChName": "网一",
+            "ColEnName": "mechanismidtkcbh",
+            "Type": "int",
+            "Length": "11",
+            "IsNull": "1",
+            "IsPrimaryKey": "0",
+            "IsAutoIncrememt": "0",
+            "AssociationTable": "dynamic_mechanismtablenowjz",
+            "Sort": "0",
+            "EditMode": "noneditable",
+            "IsShow": "0",
+            "Options": "",
+        },
+        {
+            "ColChName": "网二",
+            "ColEnName": "mechanismidtkcbh",
+            "Type": "int",
+            "Length": "11",
+            "IsNull": "1",
+            "IsPrimaryKey": "0",
+            "IsAutoIncrememt": "0",
+            "AssociationTable": "dynamic_mechanismtablenowjz",
+            "Sort": "0",
+            "EditMode": "noneditable",
+            "IsShow": "0",
+            "Options": "",
+            "checked": '1'
+        }, {
+            "ColChName": "网三",
+            "ColEnName": "mechanismidtkcbh",
+            "Type": "int",
+            "Length": "11",
+            "IsNull": "1",
+            "IsPrimaryKey": "0",
+            "IsAutoIncrememt": "0",
+            "AssociationTable": "dynamic_mechanismtablenowjz",
+            "Sort": "0",
+            "EditMode": "noneditable",
+            "IsShow": "0",
+            "Options": "",
+            "checked": '1'
+        }, {
+            "ColChName": "网四",
+            "ColEnName": "mechanismidtkcbh",
+            "Type": "int",
+            "Length": "11",
+            "IsNull": "1",
+            "IsPrimaryKey": "0",
+            "IsAutoIncrememt": "0",
+            "AssociationTable": "dynamic_mechanismtablenowjz",
+            "Sort": "0",
+            "EditMode": "noneditable",
+            "IsShow": "0",
+            "Options": "",
+            "checked": '1'
+        }, {
+            "ColChName": "网五",
+            "ColEnName": "mechanismidtkcbh",
+            "Type": "int",
+            "Length": "11",
+            "IsNull": "1",
+            "IsPrimaryKey": "0",
+            "IsAutoIncrememt": "0",
+            "AssociationTable": "dynamic_mechanismtablenowjz",
+            "Sort": "0",
+            "EditMode": "noneditable",
+            "IsShow": "0",
+            "Options": "",
+
+        },
+    ]
+}
+
+function newtable(dom, cao) {
+    console.log(dom, xxx)
+    let tabledata = xxx
+    let caotd;
+    this.dom = dom;
+    let that = this
+    let table = $("<table class='ant-table ant-table-large ant-table-bordered ant-table-scroll-position-left'><thead class='ant-table-thead'></thead><tbody class='ant-table-tbody'></tbody></table>")
+    let tr = $("<tr><th><input class='checkbox' type='checkbox'/></th></tr>")
+    let tr2 = $("<tr><td><input class='checkbox' type='checkbox'/></td></tr>")
+    for (let i in tabledata.Remarks) {
+        let th = $("<th>" + tabledata.Remarks[i].column_comment + "</th>")
+        th.data('key', tabledata.Remarks[i].column_name)
+        tr.append(th)
+    }
+    if (cao) {
+        tr.append("<th>操作</th>")
+        let caoarr = [{
+            name: '修改'
+        }, {
+            name: '删除'
+        }]
+        caotd = $("<td></td>")
+        for (let i in caoarr) {
+            let caoa = $("<a>" + caoarr[i].name + "</a>")
+            caotd.append(caoa)
+            if (i < caoarr.length - 1) {
+                caotd.append("<span> | </span>")
+            }
+        }
+        //		tr2.append(caotd)
+    }
+    //在tr上添加td并且绑定key，的字段名
+    function bindkey(tr) {
+        for (let i in tabledata.Remarks) {
+            let td = $("<td></td>")
+            td.data('key', tabledata.Remarks[i].column_name)
+            tr.append(td)
+        }
+        if (caotd) {
+            let tdcao = caotd.clone()
+            tr.append(tdcao)
+            //行内按键添加点击事件
+            tdcao.find('a').on('click', function() {
+                console.log(this)
+                console.log($(this).parent().parent().data('data'))
+            })
+        }
+    }
+    this.filltable = function(Filldata) {
+        table.find("tbody").empty()
+        tr.data('data', Filldata)
+        var unallchecked = true
+        for (let i in Filldata) {
+            let tr3 = tr2.clone()
+            bindkey(tr3)
+            //		console.log(tr3)
+            tr3.data('data', Filldata[i])
+            // console.log(Filldata[i].checked,"是否选中")
+            if (Filldata[i].checked) {
+                tr3.find('td').eq(0).find('input').prop("checked", true)
+            } else {
+                unallchecked = false
+            }
+            tr3.find('td').each((j, jm) => {
+                if ($(jm).data('key')) {
+                    $(jm).html(Filldata[i][$(jm).data('key')])
+                }
+            })
+            table.find("tbody").append(tr3)
+        }
+        console.log(unallchecked, "unallcheckedunallcheckedunallchecked")
+        if (unallchecked) {
+            tr.find("th").eq(0).find('input').prop("checked", true)
+        } else {
+            tr.find("th").eq(0).find('input').prop("checked", false)
+        }
+        singleclick()
+    }
+    console.log(this)
+    var table_data = tabledata.Columns
+    console.log(tabledata.Columns, "table里面的数据")
+    table.find("thead").append(tr)
+    dom.append(table)
+    this.filltable(tabledata.Columns)
+    //点选事件
+    this.Selected_data = []
+
+    dom.find("table tr th .checkbox").on('click', function() {
+        console.log($(this).parent().parent().data('data'))
+        console.log($(this).is(':checked'))
+        dom.find("table tr td .checkbox").each((i, im) => {
+            if ($(this).is(':checked')) {
+                $(im).prop("checked", true)
+                that.Selected_data = $(this).parent().parent().data('data')
+                table_data.map((nt, n) => {
+                    nt.checked = 1
+                })
+            } else {
+                $(im).prop("checked", false)
+                that.Selected_data = []
+                table_data.map((nt, n) => {
+                    nt.checked = 0
+                })
+            }
+
+        })
+
+        console.log(table_data, "全选")
+        inputul(table_data)
+    })
+
+    //行内的点击事件
+
+    function singleclick() {
+        dom.find("table tr td .checkbox").each((t, tm) => {
+            $(tm).on('click', function() {
+                console.log($(this).is(':checked'))
+                let click_data = $(this).parent().parent().data('data')
+                console.log(click_data, "数据数据数据")
+                if ($(this).is(':checked')) {
+                    table_data.map((jt, j) => {
+                        if (jt.ColChName == click_data.ColChName) {
+                            jt.checked = 1
+                        }
+                    })
+                } else {
+                    table_data.map((jt, j) => {
+                        if (jt.ColChName == click_data.ColChName) {
+                            jt.checked = 0
+                        }
+                    })
+                }
+                console.log(table_data, "wwwwwwwwwwwww")
+                inputul(table_data)
+                let allchoise = false,
+                    allunchoise = false;
+                that.Selected_data = []
+                dom.find("table tr td .checkbox").each((x, xm) => {
+                    if ($(xm).is(':checked')) {
+                        allchoise = true
+                        that.Selected_data.push($(xm).parent().parent().data('data'))
+                    } else {
+                        allunchoise = true
+                    }
+
+                })
+                if (allchoise && !allunchoise) {
+                    console.log(dom.find("table tr td .checkbox"))
+                    dom.find("table tr th .checkbox").prop("checked", true)
+                } else {
+                    dom.find("table tr th .checkbox").prop("checked", false)
+                }
+                console.log(that.Selected_data, "选择的数据")
+            })
+        })
+    }
+    // 选择的框框
+    let ul = $("<ul class=inputul></ul>")
+    dom.parent().append(ul)
+    inputul(table_data)
+
+    function inputul(table_data) {
+        console.log(table_data)
+        ul.empty()
+        table_data.map((it, i) => {
+            // console.log(it,i)
+            if (it.checked) {
+                let li = $("<li>" + it.ColChName + "</li>")
+                let a = $("<a>X</a>")
+                a.data("data", it)
+                li.append(a)
+                ul.append(li)
+            }
+        })
+        console.log(ul.find('li'))
+        ul.find('li').each((lit, ind) => {
+            // console.log(lit,ind)
+            $(ind).find('a').on('click', function() {
+                let click_data = $(this).data("data")
+                table_data.map((jt, j) => {
+                    if (jt.ColChName == click_data.ColChName) {
+                        jt.checked = 0
+                    }
+                })
+                console.log(table_data, "点击后的数据")
+                $(this).parent().remove()
+                that.filltable(table_data)
+
+            })
+        })
+    }
+}
+var div = $(".table")
+var table = new newtable(div, true)
+$("button").on("click", function() {
+    table.filltable([{
+        "ColChName": "留二"
+    }, {
+        "ColChName": "留3"
+    }, {
+        "ColChName": "留2"
+    }])
+})
+</script>
+
+</body>
+</html>

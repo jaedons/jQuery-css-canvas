@@ -1,0 +1,62 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>会动的进度条-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+@keyframes mymove {
+	from {
+	background-image:-webkit-repeating-linear-gradient(-60deg,transparent 10px,rgba(255,255,255,0.15) 10px,rgba(255,255,255,0.15) 20px,transparent 20px,rgba(255,255,255,0.15) 30px,rgba(255,255,255,0.15) 30px);
+	background-image:-moz-repeating-linear-gradient(-60deg,rgba(255,255,255,0.15) 10px,transparent 10px,transparent 20px,rgba(255,255,255,0.15) 20px,rgba(255,255,255,0.15) 30px,transparent 30px);
+	background-image:-o-repeating-linear-gradient(-60deg,rgba(255,255,255,0.15) 10px,transparent 10px,transparent 20px,rgba(255,255,255,0.15) 20px,rgba(255,255,255,0.15) 30px,transparent 30px);
+	background-image:repeating-linear-gradient(-60deg,transparent 10px,rgba(255,255,255,0.15) 10px,rgba(255,255,255,0.15) 20px,transparent 20px,rgba(255,255,255,0.15) 30px,rgba(255,255,255,0.15) 30px);
+}
+to {
+	background-image:-webkit-repeating-linear-gradient(-60deg,rgba(255,255,255,0.15) 10px,transparent 10px,transparent 20px,rgba(255,255,255,0.15) 20px,rgba(255,255,255,0.15) 30px,transparent 30px);
+	background-image:-moz-repeating-linear-gradient(-60deg,rgba(255,255,255,0.15) 10px,transparent 10px,transparent 20px,rgba(255,255,255,0.15) 20px,rgba(255,255,255,0.15) 30px,transparent 30px);
+	background-image:-o-repeating-linear-gradient(-60deg,rgba(255,255,255,0.15) 10px,transparent 10px,transparent 20px,rgba(255,255,255,0.15) 20px,rgba(255,255,255,0.15) 30px,transparent 30px);
+	background-image:repeating-linear-gradient(-60deg,rgba(255,255,255,0.15) 10px,transparent 10px,transparent 20px,rgba(255,255,255,0.15) 20px,rgba(255,255,255,0.15) 30px,transparent 30px);
+}
+}.bar {
+	width:280px;
+	height:30px;
+	margin:100px auto;
+	overflow:hidden;
+	border-radius:15px;
+}
+.jindutiao {
+	width:0;
+	height:30px;
+	background:#149bdf;
+	background-image:-webkit-repeating-linear-gradient(-60deg,rgba(255,255,255,0.15) 10px,transparent 10px,transparent 20px,rgba(255,255,255,0.15) 20px,rgba(255,255,255,0.15) 30px,transparent 30px);
+	background-image:-moz-repeating-linear-gradient(-60deg,rgba(255,255,255,0.15) 10px,transparent 10px,transparent 20px,rgba(255,255,255,0.15) 20px,rgba(255,255,255,0.15) 30px,transparent 30px);
+	background-image:-o-repeating-linear-gradient(-60deg,rgba(255,255,255,0.15) 10px,transparent 10px,transparent 20px,rgba(255,255,255,0.15) 20px,rgba(255,255,255,0.15) 30px,transparent 30px);
+	background-image:repeating-linear-gradient(-60deg,rgba(255,255,255,0.15) 10px,transparent 10px,transparent 20px,rgba(255,255,255,0.15) 20px,rgba(255,255,255,0.15) 30px,transparent 30px);
+	animation:mymove 0.2s infinite;
+}
+</style>
+</head>
+<body>
+<div class="bar" id="bar">
+    <div class="jindutiao" id="jindutiao">
+    </div>
+</div>
+
+<script>
+var jindu = $("#jindutiao");
+var bar = $("#bar");
+var barWidth = bar.width()
+var timer = null;
+var Width = 0;
+timer = setInterval(function() {
+    Width += 5;
+    jindu.css("width", Width + "px");
+    if (Width == 280) {
+        clearInterval(timer);
+    }
+}, 100)
+</script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>input输入内容字体和placeholder字体样式-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+input {
+	width:300px;
+}
+input::-webkit-input-placeholder {
+	/* WebKit browsers */ 
+    font-size:14px;
+	color:red;
+}
+input:-moz-placeholder {
+	/* Mozilla Firefox 4 to 18 */ 
+font-size:14px;
+	color:red;
+}
+input::-moz-placeholder {
+	/* Mozilla Firefox 19+ */ 
+font-size:14px;
+	color:red;
+}
+input:-ms-input-placeholder {
+	/* Internet Explorer 10+ */ 
+font-size:14px;
+	color:red;
+}
+</style>
+</head>
+<body>
+<input type="text" name="" id="once" value="" placeholder="提示字体样式可以修改">
+
+<script>
+
+</script>
+
+</body>
+</html>

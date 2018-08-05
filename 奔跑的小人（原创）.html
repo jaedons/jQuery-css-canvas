@@ -1,0 +1,173 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>奔跑的小人（原创）-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<style>
+* {
+	padding:0;
+	margin:0;
+}
+body {
+	background:#333;
+}
+.man {
+	width:100px;
+	height:200px;
+	position:absolute;
+	top:200px;
+	left:100px;
+	animation-name:run;
+	animation-duration:3s;
+	animation-timing-function:linear;
+	animation-iteration-count:infinite;
+}
+.man2 {
+	top:0;
+	left:450px;
+}
+.man3 {
+	top:400px;
+	left:250px;
+}
+.man4 {
+	left:500px;
+}
+@keyframes run {
+	0% {
+	transform:translateX(0);
+}
+100% {
+	transform:translateX(1200px);
+}
+}.head {
+	width:50px;
+	height:60px;
+	border-radius:25px;
+	border:2px solid white;
+	margin:0 auto;
+}
+.body {
+	width:2px;
+	height:65px;
+	background:white;
+	margin:0 auto;
+}
+.hand-left,.hand-right {
+	width:40px;
+	height:50px;
+	border-left:2px solid white;
+	border-bottom:2px solid white;
+	position:absolute;
+	top:85px;
+	left:49px;
+	transform-origin:0 0;
+}
+.hand-left {
+	transform:rotate(45deg);
+	animation:hand-left 0.5s linear infinite;
+}
+@keyframes hand-left {
+	0% {
+	transform:rotate(60deg);
+}
+50% {
+	transform:rotate(-45deg);
+}
+100% {
+	transform:rotate(60deg);
+}
+}.hand-right {
+	transform:rotate(-45deg);
+	animation:hand-right 0.5s linear infinite;
+}
+@keyframes hand-right {
+	0% {
+	transform:rotate(-45deg);
+}
+50% {
+	transform:rotate(60deg);
+}
+100% {
+	transform:rotate(-45deg);
+}
+}.leg-left,.leg-right {
+	width:50px;
+	height:55px;
+	border-bottom:2px solid white;
+	border-right:2px solid white;
+	position:absolute;
+	top:128px;
+	transform-origin:100% 0;
+}
+.leg-left {
+	transform:rotate(45deg);
+	animation:leg-left 0.5s linear infinite;
+}
+@keyframes leg-left {
+	0% {
+	transform:rotate(45deg);
+}
+50% {
+	transform:rotate(-60deg);
+}
+100% {
+	transform:rotate(45deg);
+}
+}.leg-right {
+	transform:rotate(-80deg);
+	animation:leg-right 0.5s linear infinite;
+}
+@keyframes leg-right {
+	0% {
+	transform:rotate(-80deg);
+}
+50% {
+	transform:rotate(45deg);
+}
+100% {
+	transform:rotate(-80deg);
+}
+}</style>
+</head>
+<body>
+<div class="man">
+    <div class="head"></div>
+    <div class="body"></div>
+    <div class="hand-left"></div>
+    <div class="hand-right"></div>
+    <div class="leg-left"></div>
+    <div class="leg-right"></div>
+</div>
+<div class="man man2">
+    <div class="head"></div>
+    <div class="body"></div>
+    <div class="hand-left"></div>
+    <div class="hand-right"></div>
+    <div class="leg-left"></div>
+    <div class="leg-right"></div>
+</div>
+<div class="man man3">
+    <div class="head"></div>
+    <div class="body"></div>
+    <div class="hand-left"></div>
+    <div class="hand-right"></div>
+    <div class="leg-left"></div>
+    <div class="leg-right"></div>
+</div>
+<div class="man man4">
+    <div class="head"></div>
+    <div class="body"></div>
+    <div class="hand-left"></div>
+    <div class="hand-right"></div>
+    <div class="leg-left"></div>
+    <div class="leg-right"></div>
+</div>
+
+<script>
+
+</script>
+
+</body>
+</html>

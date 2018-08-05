@@ -1,0 +1,83 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>自定义单选框样式（原创）-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<style>
+div.wrap {
+	margin-left:10px;
+	display:flex;
+	align-items:center;
+}
+div.wrap div {
+	width:24px;
+	height:24px;
+	border-radius:25px;
+	/*此时用50%也可以*/
+        border:1px solid #bbb;
+	margin-top:10px;
+	cursor:pointer;
+}
+div.wrap span {
+	margin:5px 0 0 10px;
+	font-family:"微软雅黑";
+	font-size:18px;
+	cursor:pointer;
+	color:midnightblue;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div></div>
+    
+    <span>大秦帝国</span>
+</div>
+<div class="wrap">
+    <div></div>
+    <span>大汉帝国</span>
+</div>
+<div class="wrap">
+    <div></div>
+    <span>大唐帝国</span>
+</div>
+<div class="wrap">
+    <div></div>
+    <span>罗马帝国</span>
+</div>
+<div class="wrap">
+    <div></div>
+    <span>大明帝国</span>
+</div>
+
+<script>
+var leng = $(".wrap").length;
+$(".wrap div").on('click', function() {
+    for (var i = 0; i < leng; i++) {
+        $(".wrap div").css({
+            'background': '',
+            'border-color': '#bbb'
+        })
+    }
+    $(this).css({
+        'background': '#444',
+        'border-color': 'yellow'
+    });
+})
+$(".wrap span").on('click', function() {
+    for (var i = 0; i < leng; i++) {
+        $(".wrap div").css({
+            'background': '',
+            'border-color': '#bbb'
+        })
+    }
+    $(this).siblings(".wrap div").css({
+        'background': '#444',
+        'border-color': 'yellow'
+    });
+})
+</script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>碰撞检测（原创）-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+.div1 {
+	position:absolute;
+	width:100px;
+	height:100px;
+	background:green;
+}
+.div2 {
+	z-index:-1;
+	position:absolute;
+	left:200px;
+	top:200px;
+	width:100px;
+	height:100px;
+	background:yellow;
+}
+.boom {
+	width:75px;
+	height:75px;
+	border-radius:50%;
+	background:red;
+}
+</style>
+</head>
+<body>
+<div class="div1"></div>
+<div class="div2"></div>
+
+<script>
+window.onload = function() {
+    var oDiv = document.getElementsByClassName('div1')[0];
+    var oDiv2 = document.getElementsByClassName('div2')[0];
+    var disX = 0;
+    var disY = 0;
+    var flag = 0;
+    oDiv.onmousedown = function(e) {
+        var e = e || window.event;
+        disX = e.clientX - oDiv.offsetLeft;
+        disY = e.clientY - oDiv.offsetTop;
+        document.onmousemove = function(e) {
+            var e = e || window.event;
+
+            var t1 = oDiv.offsetTop;
+            var l1 = oDiv.offsetLeft;
+            var r1 = oDiv.offsetLeft + oDiv.offsetWidth;
+            var b1 = oDiv.offsetTop + oDiv.offsetHeight;
+
+            var t2 = oDiv2.offsetTop;
+            var l2 = oDiv2.offsetLeft;
+            var r2 = oDiv2.offsetLeft + oDiv2.offsetWidth;
+            var b2 = oDiv2.offsetTop + oDiv2.offsetHeight;
+
+            // 碰撞检测 b1<t2 || l1>r2 || t1>b2 || r1<l2
+            if (b1 < t2 || l1 > r2 || t1 > b2 || r1 < l2) {
+                // oDiv2.classList.remove('boom');
+            } else {
+                flag++;
+                if (flag <= 1) {
+                    oDiv.classList.add('boom');
+                    oDiv2.classList.add('boom');
+                } else if (flag == 2) {
+                    oDiv2.style.background = 'blue';
+                } else if (flag == 3) {
+                    oDiv2.style.transition = 'all .5s';
+                    oDiv2.style.left = '500px';
+                } else if (flag == 10) {
+                    oDiv2.style.transition = 'all .5s';
+                    oDiv2.style.left = '300px';
+                }
+            }
+            oDiv.style.left = e.clientX - disX + 'px';
+            oDiv.style.top = e.clientY - disY + 'px';
+        }
+        document.onmouseup = function() {
+            document.onmousemove = null;
+            document.onmouseup = null;
+        }
+    }
+}
+</script>
+
+</body>
+</html>

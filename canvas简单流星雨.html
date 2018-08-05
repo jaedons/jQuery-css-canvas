@@ -1,0 +1,139 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>canvas简单流星雨-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+ * {
+	padding:0px;
+	margin:0px;
+}
+html,body {
+	width:100%;
+	height:100%;
+	overflow:hidden;
+}
+</style>
+</head>
+<body>
+<div style="background:url(http://www.jq22.com/demo/jqueryLbt201801110058/images/a5.png);background-size:100% 100%;">
+    <canvas id="myCanvas" style="width:100%;height:100%;"> 
+            Your browser does not support the canvas element.
+        </canvas>
+</div>
+
+<script>
+function lx(obj) {
+    this.Id = obj.id;
+    this.src = obj.src; //图片地址
+    this.img = ''; //图片
+    this.cxt = ''; //canvas实例
+    this.Time = ""; //定时器控制流星运动
+    this.Time2 = ""; //定时器创建流星
+    this.sum = 500; //流星出现频率
+    this.beginIpY = []; //流星初始位置
+    this.beginIpX = [];
+    this.sd = []; //每个流星的速度
+    this.init(); //初始化
+
+}
+lx.prototype = {
+    init: function() {
+        // 布局
+        var c = document.getElementById(this.Id);
+        c.setAttribute("width", window.innerWidth * 2);
+        c.setAttribute("height", window.innerHeight * 2);
+        var cxt = c.getContext("2d");
+        this.cxt = cxt;
+        this.insta();
+    },
+    // canvas背景
+    insta: function() {
+        var that = this;
+        that.positionStar()
+
+    },
+    // 创建星星
+    newStar: function() {
+        this.cxt.clearRect(0, 0, window.innerWidth * 2, window.innerHeight * 2);
+
+        this.cxt.strokeStyle = '#fff';
+        this.cxt.lineCap = 'round';
+        this.cxt.lineWidth = 4;
+
+
+        for (var i = 0; i < this.beginIpY.length; i++) {
+            var xw = Math.floor(Math.random() * 10 * window.innerHeight) + 500;
+            var ctx = this.cxt;
+
+            if (this.beginIpY[i] >= xw) {
+                this.beginIpX.splice(i, 1);
+                this.beginIpY.splice(i, 1);
+                this.sd.splice(i, 1);
+            } else {
+                this.beginIpX[i] = this.beginIpX[i] + this.sd[i];
+                this.beginIpY[i] = this.beginIpY[i] + this.sd[i];
+                //径向渐变，从流星头尾圆心，半径越大，透明度越高
+                var gra = ctx.createRadialGradient(
+                    this.beginIpX[i], this.beginIpY[i], 0, this.beginIpX[i], this.beginIpY[i], 50)
+                var PI = Math.PI
+                gra.addColorStop(0, '#FFFFFF')
+                gra.addColorStop(1, 'rgba(0,0,0,0)')
+                ctx.fillStyle = gra
+                ctx.beginPath()
+                //流星头，二分之一圆
+                ctx.arc(this.beginIpX[i], this.beginIpY[i], 2, -PI / 4, -5 * PI / 4)
+                //绘制流星尾，三角形
+                ctx.lineTo(this.beginIpX[i] - 50, this.beginIpY[i] - 50)
+                ctx.closePath()
+                ctx.stroke();
+
+            }
+        }
+    },
+    //流星定位
+    positionStar: function() {
+        for (var i = 0; i < 1; i++) {
+            var xw = Math.floor(Math.random() * 2000);
+            var wt = Math.floor(Math.random() * 30);
+            var sd = Math.floor(Math.random() * 4) + 2;
+            // 开始位置
+            this.beginIpX.push(xw);
+            this.beginIpY.push(wt);
+            this.sd.push(sd);
+        }
+        this.starAnimet();
+    },
+    //添加星星运动
+    starAnimet: function() {
+        var that = this;
+        this.Time = setInterval(function() {
+            that.newStar();
+        }, 1);
+        this.pushStarfun();
+    },
+    // 定时添加流星雨
+    pushStarfun: function() {
+        var that = this;
+        this.Time2 = setInterval(function() {
+            if (that.beginIpY.length < 5) {
+                var xw = Math.floor(Math.random() * 2000);
+                var wt = Math.floor(Math.random() * 30);
+                var sd = Math.floor(Math.random() * 4) + 2;
+                // 开始位置
+                that.beginIpX.push(xw);
+                that.beginIpY.push(wt);
+                that.sd.push(sd);
+            }
+        }, this.sum)
+    }
+}
+ var aa = new lx({
+        id: "myCanvas",
+        src: "http://www.jq22.com/img/cs/500x500-1.png",
+    });
+</script>
+
+</body>
+</html>

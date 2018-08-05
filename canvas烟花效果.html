@@ -1,0 +1,122 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>canvas烟花效果-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+#mycanvas {
+	margin:0 auto;
+	display:block;
+	border:1px solid black;
+	background-color:black;
+}
+</style>
+</head>
+<body>
+<canvas id="mycanvas" height="500" width="800"></canvas>
+
+<script>
+ var RAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
+     window.setTimeout(callback, 1000 / 60);
+ };
+ var can = document.getElementById("mycanvas")
+ var ctx = can.getContext("2d");
+ var height = can.height;
+ var width = can.width;
+ var fires = [];
+ var booms = [];
+ var edbooms = []
+ var i = 0,
+     j = 100;
+
+ function fireBoom() {
+     booms.forEach(function(boom, index) {
+         boom.b += 1;
+         if (boom.b > 50) {
+             edbooms.push(booms[index])
+             booms.splice(index, 1);
+             return;
+         }
+         var len = boom.bl.length;
+
+         var x = 0,
+             y = 0;
+         var bl = 0;
+         for (var i = 0; i < len; i++) {
+             boom.bl[i] += boom.bv[i];
+             ctx.beginPath();
+             x = boom.x + Math.cos(boom.pi[i]) * boom.bl[i];
+             y = boom.y + Math.sin(boom.pi[i]) * boom.bl[i];
+             ctx.fillStyle = ctx.shadowColor = "#50" + boom.color;
+             ctx.fillRect(x, y, 4, 4);
+             ctx.fill();
+         }
+
+
+     })
+
+ }
+
+ function fireUp() {
+     fires.forEach(function(fire, index) {
+         ctx.beginPath();
+         fire.x += fire.kx;
+         fire.v -= 0.5;
+         if (fire.y < fire.by) {
+             var len = 32;
+             var boom = [];
+             var bl = [];
+             var pi = [];
+             var p = Math.PI * 2 / len;
+             for (var i = 0; i < len; i++) {
+                 boom.push((1 + Math.random()))
+                 bl.push(0)
+                 pi.push((i * p + p * Math.random()))
+             }
+             booms.push({
+                 x: fire.x,
+                 y: fire.y,
+                 b: 0,
+                 bv: boom,
+                 bl: bl,
+                 pi: pi,
+                 color: parseInt(1000 + 9000 * Math.random())
+             });
+             fires.splice(index, 1)
+             return;
+         }
+         fire.y = fire.y - fire.v * 0.05;
+         ctx.fillStyle = ctx.shadowColor = "#50FFFF";
+         ctx.fillRect(fire.x, fire.y, 4, 4);
+         ctx.fill();
+     })
+ }
+ animate()
+ setInterval(addFire, 500)
+
+ function animate() {
+     ctx.globalCompositeOperation = 'source-over';
+     ctx.shadowBlur = 0;
+     ctx.fillStyle = 'rgba(0,0,0,alp)'.replace('alp', 0.03);
+     ctx.fillRect(0, 0, width, height);
+     ctx.globalCompositeOperation = 'lighter';
+     fireUp();
+     fireBoom();
+     RAF(animate);
+ }
+
+ function addFire() {
+     var fire = {
+         x: width / 4 + Math.random() * (width / 2),
+         y: height,
+         v: 100 + 20 * Math.random(),
+         kx: -1 + Math.random() * 2,
+         by: 100 + 50 * Math.random(),
+     }
+     fires.push(fire);
+ }
+</script>
+
+</body>
+</html>

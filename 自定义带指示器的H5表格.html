@@ -1,0 +1,463 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>自定义带指示器的H5表格-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+#container,#tip-board {
+	font-family:"微软雅黑";
+}
+#container {
+	display:flex;
+	width:98%;
+	/*height:500px;
+	*/
+			/*border:1px solid red;
+	*/
+}
+.content {
+	display:flex;
+	/*border:1px solid red;
+	*/
+}
+#content-view1 {
+	flex-grow:1;
+}
+#content-view2 {
+	flex-grow:12;
+}
+#content-view3 {
+	flex-grow:4;
+}
+table {
+	/*width:100%;
+	*/
+}
+#content-view2 div {
+	flex-grow:1;
+}
+#content-view3 div {
+	flex-grow:1;
+}
+#content-view2 table tr:nth-child(1) th,#content-view2 table tr:nth-child(2) th {
+	text-align:center;
+}
+#content-view3 table tr:nth-child(1) th,#content-view3 table tr:nth-child(2) th {
+	text-align:center;
+}
+td {
+	text-align:right;
+}
+#content-view2 td:hover,#content-view3 td:hover {
+	cursor:pointer;
+	background-color:yellow;
+}
+.row-r th {
+	text-align:right;
+}
+.link-row th:hover {
+	cursor:pointer;
+	background-color:#18E690;
+}
+#x-indicator,#y-indicator,#tip-board {
+	position:absolute;
+}
+#x-indicator {
+	top:0;
+	left:0;
+	width:300px;
+	height:2px;
+	border:1px dashed red;
+}
+#y-indicator {
+	top:0;
+	left:0;
+	width:2px;
+	height:300px;
+	border:1px dashed red;
+}
+#tip-board {
+	width:145px;
+	height:100px;
+	background-color:#fff;
+	border:1px solid #ccc;
+	display:none;
+	padding-left:5px;
+}
+</style>
+</head>
+<body>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<div id="container">
+    <div class="content" id="content-view1">
+        <table class="table table-bordered table-condensed table-hover" id="tab1">
+            <tbody><tr>
+                <th>...</th>
+            </tr>
+            <tr>
+                <th>单位：元</th>
+            </tr>
+            <tr class="danger">
+                <th>负数发票</th>
+            </tr>
+            <tr>
+                <td>未开票</td>
+            </tr>
+            <tr>
+                <td>已开票</td>
+            </tr>
+            <tr>
+                <td>已作废</td>
+            </tr>
+            <tr class="danger">
+                <th>正数发票</th>
+            </tr>
+            <tr>
+                <td>未开票</td>
+            </tr>
+            <tr>
+                <td>已开票</td>
+            </tr>
+            <tr>
+                <td>已作废</td>
+            </tr>
+            <tr>
+                <th>合计</th>
+            </tr>
+        </tbody></table>
+    </div>
+
+    <div class="content " id="content-view2">
+        <div>
+            <table class="table table-bordered table-condensed table-hover">
+                <tbody><tr class="info">
+                    <th colspan="3">0.06</th>
+                </tr>
+                <tr class="success">
+                    <th>金额</th>
+                    <th>税额</th>
+                    <th>商品</th>
+                </tr>
+                <tr class="link-row row-r " id="f-all-0.06">
+                    <th>700</th>
+                    <th>1200</th>
+                    <th>2100</th>
+                </tr>
+                <tr id="f-0-0.06">
+                    <td>100</td>
+                    <td>200</td>
+                    <td>300</td>
+                </tr>
+                <tr id="f-1-0.06">
+                    <td>200</td>
+                    <td>400</td>
+                    <td>600</td>
+                </tr>
+                <tr id="f-2-0.06">
+                    <td>400</td>
+                    <td>800</td>
+                    <td>1200</td>
+                </tr>
+                <tr class="link-row row-r" id="z-all-0.06">
+                    <th>700</th>
+                    <th>1200</th>
+                    <th>2100</th>
+                </tr>
+                <tr id="z-0-0.06">
+                    <td>100</td>
+                    <td>200</td>
+                    <td>300</td>
+                </tr>
+                <tr id="z-1-0.06">
+                    <td>200</td>
+                    <td>400</td>
+                    <td>600</td>
+                </tr>
+                <tr id="z-2-0.06">
+                    <td>400</td>
+                    <td>800</td>
+                    <td>1200</td>
+                </tr>
+                <tr class="link-row row-r" id="all-all-0.06">
+                    <th>1400</th>
+                    <th>2400</th>
+                    <th>4200</th>
+                </tr>
+            </tbody></table>
+        </div>
+
+        <div>
+            <table class="table table-bordered table-condensed table-hover">
+                <tbody><tr class="info">
+                    <th colspan="3">0.13</th>
+                </tr>
+                <tr class="success">
+                    <th>金额</th>
+                    <th>税额</th>
+                    <th>商品</th>
+                </tr>
+                <tr class="link-row row-r" id="f-all-0.13">
+                    <th>700</th>
+                    <th>1200</th>
+                    <th>2100</th>
+                </tr>
+                <tr id="f-0-0.13">
+                    <td>100</td>
+                    <td>200</td>
+                    <td>300</td>
+                </tr>
+                <tr id="f-1-0.13">
+                    <td>200</td>
+                    <td>400</td>
+                    <td>600</td>
+                </tr>
+                <tr id="f-2-0.13">
+                    <td>400</td>
+                    <td>800</td>
+                    <td>1200</td>
+                </tr>
+                <tr class="link-row row-r" id="z-all-0.13">
+                    <th>700</th>
+                    <th>1200</th>
+                    <th>2100</th>
+                </tr>
+                <tr id="z-0-0.13">
+                    <td>100</td>
+                    <td>200</td>
+                    <td>300</td>
+                </tr>
+                <tr id="z-1-0.13">
+                    <td>200</td>
+                    <td>400</td>
+                    <td>600</td>
+                </tr>
+                <tr id="z-2-0.13">
+                    <td>400</td>
+                    <td>800</td>
+                    <td>1200</td>
+                </tr>
+                <tr class="link-row row-r" id="all-all-0.13">
+                    <th>1400</th>
+                    <th>2400</th>
+                    <th>4200</th>
+                </tr>
+            </tbody></table>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="content " id="content-view3">
+        <div>
+            <table class="table table-bordered table-condensed table-hover " id="tab1">
+                <tbody><tr class="warning">
+                    <th colspan="3">汇总</th>
+                </tr>
+                <tr class="warning">
+                    <th>金额</th>
+                    <th>税额</th>
+                    <th>商品</th>
+                </tr>
+                <tr class="link-row row-r" id="f-all-all">
+                    <th>0</th>
+                    <th>0</th>
+                    <th>0</th>
+                </tr>
+                <tr id="f-0-all">
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr id="f-1-all">
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr id="f-2-all">
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr class="link-row row-r" id="z-all-all">
+                    <th>0</th>
+                    <th>0</th>
+                    <th>0</th>
+                </tr>
+                <tr id="z-0-all">
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr id="z-1-all">
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr id="z-2-all">
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr class="link-row row-r" id="all-all-all">
+                    <th>0</th>
+                    <th>0</th>
+                    <th>0</th>
+                </tr>
+            </tbody></table>
+        </div>
+    </div>
+</div>
+<button class="btn btn-default" onclick="f() ">打印</button>
+<button class="btn btn-default" onclick="f2() ">汇总</button>
+<span></span>
+<div id="x-indicator"></div>
+<div id="y-indicator"></div>
+<div id="tip-board">
+    <label>值：<span id="cell-v"></span></label>
+    <label>行：<span id="cell-r"></span></label>
+    <label>列：<span id="cell-c"></span></label>
+</div>
+
+<script>
+function f() {
+    window.print();
+}
+
+function f2() {
+    var $selector = $('#content-view2 div table');
+    var arr = Array(28).join('0').split('');
+    var row = 9;
+    var col = 3;
+    for (var i = 0; i < $selector.length; i++) {
+        for (var j = 0; j < row; j++) {
+            for (var k = 0; k < col; k++) {
+                var cell = `tr:eq(${2 + j}) td:eq(${k})`;
+                if (j % 4 == 0) cell = `tr:eq(${2 + j}) th:eq(${k})`;
+                var text = $($selector[i]).find(cell).text();
+                arr[j * 3 + k] = Number(arr[j * 3 + k]) + Number(text);
+                if (i == $selector.length - 1) {
+                    var sumCell = `tr:eq(${2 + j}) td:eq(${k})`;
+                    if (j % 4 == 0) sumCell = `tr:eq(${2 + j}) th:eq(${k})`;
+                    $('#content-view3 div table').find(sumCell).text(arr[j * 3 + k]);
+                }
+            }
+        }
+    }
+}
+var self = null;
+var el = null;
+$('td,th').mousemove(function(e) {
+    var parentID = $(this).parent()[0].id;
+    if (parentID) {
+        el = e;
+    }
+});
+$('td,th').mouseenter(function(e) {
+
+    var parentID = $(this).parent()[0].id;
+    if (parentID) {
+        var body_width = $('body').outerWidth();
+        var body_height = $('body').outerHeight();
+        var tip_board_width = $('#tip-board').outerWidth();
+        var tip_board_height = $('#tip-board').outerHeight();
+        // setTimeout(() => {
+        var x = e.pageX;
+        var y = e.pageY;
+        var dif = 2
+        if ((body_width - x) < tip_board_width) {
+            _left = x - tip_board_width - dif;
+        } else {
+            _left = x + dif;
+        }
+        if ((body_height - y) < tip_board_height) {
+            _top = y - tip_board_height - dif;
+        } else {
+            _top = y + dif;
+        }
+        $('#tip-board').css({
+            "top": _top + "px",
+            "left": _left + "px"
+        });
+
+        changeXYIndicator(e);
+        setTipBoard(this, judgeXY(this));
+
+        // },1000);
+
+    } else {
+        resetXYIndicator();
+        $('#tip-board').hide();
+    }
+
+});
+
+function setTipBoard(_self, arr) {
+    $('#cell-v').text($(_self).text());
+    $('#cell-r').text(arr[0] + '-' + arr[1]);
+    $('#cell-c').text(arr[2] + '-' + arr[3]);
+    $('#tip-board').show();
+}
+
+function judgeXY(_self) {
+    var parentID = $(_self).parent()[0].id;
+    var sign = parentID.split('-');
+    var cellIndex = $(_self)[0].cellIndex;
+    var tip = []
+    if (sign[0] == 'all') {
+        tip.push('正负发票');
+    } else if (sign[0] == 'f') {
+        tip.push('负数发票');
+    } else if (sign[0] == 'z') {
+        tip.push('正数发票');
+    } else {
+        tip.push('标志位有误');
+    }
+    if (sign[1] == 'all') {
+        tip.push('合计');
+    } else if (sign[1] == '0') {
+        tip.push('未开票');
+    } else if (sign[1] == '1') {
+        tip.push('已开票');
+    } else if (sign[1] == '2') {
+        tip.push('已作废');
+    } else {
+        tip.push('标志位有误');
+    }
+    sign[2] == 'all' ? tip.push('合计') : tip.push(sign[2]);
+    cellIndex == 0 ? tip.push('金额') : (cellIndex == 1 ? tip.push('税额') : tip.push('商品'));
+    return tip;
+}
+
+function changeXYIndicator(e) {
+    var x = e.pageX;
+    var y = e.pageY;
+    var dif = 5;
+    var xIndicatorLength = $('#container')[0].offsetWidth;
+    var yIndicatorLength = $('#content-view1 table')[0].offsetHeight;
+    $('#x-indicator').css({
+        top: `${y-dif}px`,
+        width: `${xIndicatorLength}px`
+    });
+    $('#y-indicator').css({
+        left: `${x-dif}px`,
+        height: `${yIndicatorLength}px`
+    });
+}
+
+function resetXYIndicator() {
+    $('#x-indicator').css({
+        top: 0,
+        width: '300px'
+    });
+    $('#y-indicator').css({
+        left: 0,
+        height: '300px'
+    });
+}
+</script>
+
+</body>
+</html>

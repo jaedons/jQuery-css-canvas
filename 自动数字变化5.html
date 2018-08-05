@@ -1,0 +1,29 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>自动数字变化-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<div class="count">当前在线：<span id="number"></span></div>
+
+<script>
+ function magic_number() {
+     var num = $("#number");
+     num.animate({
+         count: 1000
+     }, {
+         duration: 5000,
+         step: function() {
+             num.text(String(parseInt(this.count)));
+         }
+     });
+ };
+ magic_number()
+</script>
+
+</body>
+</html>

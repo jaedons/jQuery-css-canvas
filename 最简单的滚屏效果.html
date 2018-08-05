@@ -1,0 +1,86 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>最简单的滚屏效果-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+ul,li {
+	margin:0;
+	padding:0
+}
+#scrollDiv {
+	width:300px;
+	height:100px;
+	min-height:25px;
+	line-height:25px;
+	border:#ccc 1px solid;
+	overflow:hidden
+}
+#scrollDiv li {
+	height:25px;
+	padding-left:10px;
+}
+</style>
+</head>
+<body>
+<div id="scrollDiv">
+    <ul>
+        <li>111111</li>
+        <li>22222</li>
+        <li>333333</li>
+        <li>444444</li>
+        <li>555555</li>
+        <li>666666</li>
+        <li>7777777</li>
+        <li>88888888</li>
+    </ul>
+</div>
+
+<script>
+(function($) {
+    $.fn.extend({
+        Scroll: function(opt, callback) {
+
+            if (!opt) var opt = {};
+            var _this = this.eq(0).find("ul:first");
+            var lineH = _this.find("li:first").height(),
+                line = opt.line ? parseInt(opt.line, 10) : parseInt(this.height() / lineH, 10),
+                speed = opt.speed ? parseInt(opt.speed, 10) : 500,
+                timer = opt.timer ? parseInt(opt.timer, 10) : 3000;
+            if (line == 0) line = 1;
+            var upHeight = 0 - line * lineH;
+
+            scrollUp = function() {
+                _this.animate({
+                    marginTop: upHeight
+                }, speed, function() {
+                    for (i = 1; i <= line; i++) {
+                        _this.find("li:first").appendTo(_this);
+                    }
+                    _this.css({
+                        marginTop: 0
+                    });
+                });
+            }
+
+            _this.hover(function() {
+                clearInterval(timerID);
+            }, function() {
+                timerID = setInterval("scrollUp()", timer);
+            }).mouseout();
+        }
+    })
+})(jQuery);
+
+$(document).ready(function() {
+    $("#scrollDiv").Scroll({
+        line: 4,
+        speed: 500,
+        timer: 3000
+    });
+});
+</script>
+
+</body>
+</html>

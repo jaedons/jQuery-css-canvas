@@ -1,0 +1,389 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>基于jQuery简单的音乐播放器、滑块-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+<style>
+html {
+	height:100%;
+}
+body {
+	height:100%;
+}
+#player {
+	display:none;
+}
+.ss-player {
+	position:fixed;
+	left:0;
+	bottom:0;
+	margin:10px;
+	color:#FFF;
+}
+.ss-player.mini .ss-box {
+	width:100px;
+	height:100px;
+	border-radius:50%;
+}
+.ss-player.mini .pbcell:nth-child(2),.ss-player.mini .pbcell:nth-child(3) {
+	display:none;
+}
+.ss-box {
+	width:500px;
+	height:100px;
+	background-color:#000;
+	overflow:hidden;
+	display:table;
+	transition:0.5s;
+}
+.ss-player .btn-ctrl {
+	width:40px;
+	height:40px;
+	margin:10px;
+	cursor:pointer;
+	display:inline-block;
+	background-image:url(http://jq22.qiniudn.com/1gvzgu.svg);
+	background-size:100% 100%;
+	background-position:center center;
+	transition:0.5s;
+}
+.ss-player .btn-ctrl.pause {
+	background-image:url(http://jq22.qiniudn.com/44mnya.svg);
+}
+.ss-player .timelabel {
+	color:#FFF;
+	font-size:14px;
+}
+.ss-player .progressbar {
+	width:300px;
+	height:4px;
+	margin:auto;
+	display:inline-block;
+	border-radius:2px;
+	background-color:rgba(255,255,255,0.2);
+	position:relative;
+}
+.ss-player .currenttime {
+	width:0%;
+	height:100%;
+	background-color:#e60012;
+	border-radius:2px;
+	position:absolute;
+	text-align:right;
+	left:0;
+	top:0;
+}
+.ss-player .buffertime {
+	width:0%;
+	height:100%;
+	background-color:rgba(180,180,180,0.5);
+	border-radius:2px;
+}
+.ss-player .currenttime .btn-drag {
+	width:6px;
+	height:6px;
+	border-radius:50%;
+	background-color:#e60012;
+	border:2px solid #FFF;
+	display:inline-block;
+	position:absolute;
+	right:0px;
+	margin-right:-4px;
+	top:-2px;
+	cursor:pointer;
+	transition:0.3s;
+}
+.ss-player .currenttime .btn-drag:hover {
+	box-shadow:0 0 10px 0 rgba(255,255,255,1);
+}
+.ss-player .pbcell {
+	display:table-cell;
+	vertical-align:middle;
+	text-align:center;
+}
+.pbcell:nth-child(3) {
+	padding:0 10px;
+}
+</style>
+</head>
+<body>
+<div class="ss-player">
+    <div class="ss-box">
+        <div class="pbcell">
+            <div class="btn-ctrl"></div>
+        </div>
+        <div class="pbcell">
+            <div class="progressbar">
+                <div class="currenttime"><i class="btn-drag"></i></div>
+                <div class="buffertime"></div>
+            </div>
+        </div>
+        <div class="pbcell">
+            <span class="timelabel">00:00/00:00</span>
+        </div>
+
+    </div>
+    <audio id="player" src="http://jq22.qiniudn.com/the.mp3" controls=""></audio>
+</div>
+
+<p style="border:1px solid #B3E4FF;background-color: aliceblue;padding: 20px;">
+    有时间做了一个播放器，做的过程中，要做拖动和滑块两个小功能，所以顺便一起演示给大家看。希望能帮到要学的人。
+</p>
+
+<h1>1、滑块演示</h1>
+拖动我试试 ：
+<div class="ZZZ" style="width:400px;height: 20px; background-color:#F1F1F1;margin:50px 0;display: inline-block;vertical-align: middle;">
+    <div class="AAA" style="width: 0%;height: 100%;background-color:#44C2FF; text-align: center; "><span class="BBB"></span></div>
+</div>
+<h1>2、播放器演示</h1>
+<p>浮动着呢，左下角哈。双击播放器会切成Mini模式啊</p>
+
+<script>
+$(function() {
+
+
+    function formatTime(seconds) {
+        var min = Math.floor(seconds / 60),
+            second = seconds % 60,
+            hour, newMin, time;
+        min = parseInt(min);
+        second = parseInt(second);
+
+        if (min > 60) {
+            hour = Math.floor(min / 60);
+            newMin = min % 60;
+        }
+
+        if (second < 10) {
+            second = '0' + second;
+        }
+        if (min < 10) {
+            min = '0' + min;
+        }
+
+        return time = hour ? (hour + ':' + newMin + ':' + second) : (min + ':' + second);
+    }
+
+    $('body').on('dragstart', '.ss-player', function() {
+        return false;
+    });
+
+    function ssplayer() {
+
+        var ssplayer = $('#player')[0];
+
+        ssplayer.ontimeupdate = function() {
+            //console.log(ssplayer.currentTime+'/'+ssplayer.duration);
+            var duration = ssplayer.duration;
+            var currentTime = ssplayer.currentTime;
+            var p = currentTime / duration * 100;
+            var dlen = formatTime(duration);
+            var clen = formatTime(currentTime);
+            var bfp = ssplayer.buffered.end(0) / duration * 100;
+            //console.log(dlen+'/'+clen);
+            $('.ss-player .timelabel').html(clen + '/' + dlen);
+            $('.ss-player .currenttime').stop(false, true).css({
+                width: p + '%'
+            });
+            $('.ss-player .buffertime').stop(false, true).css({
+                width: bfp + '%'
+            });
+        }
+
+        ssplayer.onended = function() {
+            $('.ss-player .btn-ctrl').removeClass('pause');
+        }
+
+        ssplayer.onprogress = function() {
+
+        }
+
+        return $('#player')[0];
+    }
+
+    $('body').on('dblclick', '.ss-player', function() {
+        $(this).toggleClass('mini');
+    });
+
+    var player = ssplayer();
+
+    $('body').on('click', '.ss-player .btn-ctrl', function(e) {
+        if (player.paused) {
+            player.play();
+            $('.ss-player .btn-ctrl').removeClass('pause').addClass('pause');
+
+        } else {
+            player.pause();
+            $('.ss-player .btn-ctrl').removeClass('pause');
+        }
+        e.stopPropagation();
+
+    });
+
+    //拖动
+    $.fn.extend({
+        initDrag: function(options) {
+            var defaults = {
+                range: false, //可拖动范围元素对象
+                sx: true, //是否可横向拖动
+                sy: true, //是否可纵向拖动
+                slider: false, //是否为滑块模式，是则为对象
+                sliding: function() {}, //滑动滑块时的回调函数
+                bans: false //禁用哪些内部对象拖动
+            }
+            var opts = $.extend(defaults, options);
+            var _this = $(this);
+            _this.isDragStart = false; //是否拖动模式
+            _this.dragStartX = null; //起始坐标X
+            _this.dragStartY = null; //起始坐标Y
+            _this.mousedown(function(e) {
+                _this.isDragStart = true; //标记为手动模式
+                _this.dragStartX = e.pageX - _this.offset().left; //对象起始位置相对坐标X
+                _this.dragStartY = e.pageY - _this.offset().top; //对象起始位置相对坐标Y
+                if ($(document).setCapture) {
+                    $(document).setCapture();
+                }
+
+                //滑块模式（当点击范围滑动和点击处）
+                if (opts.slider !== false) {
+                    var x = e.pageX - opts.slider.offset().left;
+                    var y = e.pageY - opts.slider.offset().top;
+                    var ww = opts.range.width();
+                    var hh = opts.range.height();
+                    if (x > ww) {
+                        x = ww;
+                    }
+                    if (y > hh) {
+                        y = hh;
+                    }
+                    if (opts.sx) {
+                        opts.slider.css('width', x + 'px');
+                        opts.sliding(x / ww);
+                    }
+                    if (opts.sy) {
+                        opts.slider.css('height', y + 'px');
+                        opts.sliding(y / hh);
+                    }
+                }
+
+                e.stopPropagation();
+            });
+
+            //禁用哪些内部元素拖动
+            if (opts.bans !== false) {
+                opts.bans.each(function() {
+                    $(this).mousedown(function(e) {
+                        e.stopPropagation();
+                    });
+                });
+            }
+
+
+            //拖动时
+            $(document).mousemove(function(e) {
+                if (!_this.isDragStart) {
+                    return false;
+                }
+                if (opts.slider !== false) {
+                    x = e.pageX - opts.slider.offset().left;
+                    y = e.pageY - opts.slider.offset().top;
+                } else {
+                    var x = e.pageX - _this.dragStartX - _this.css('margin-left').replace('px', '');
+                    var y = e.pageY - _this.dragStartY - _this.css('margin-top').replace('px', '');
+                }
+
+                //是否启用拖动范围
+                if (opts.range !== false) {
+                    var ww = opts.range.width();
+                    var hh = opts.range.height();
+                    var zw = _this.outerWidth(true);
+                    var zh = _this.outerHeight(true);
+                    if (x < 0) {
+                        x = 0;
+                    }
+
+                    if (y < 0) {
+                        y = 0;
+                    }
+
+                    if (opts.slider !== false) {
+                        if (x > ww) {
+                            x = ww;
+                        }
+                        if (y > hh) {
+                            y = hh;
+                        }
+                    } else {
+                        if (x > ww - zw) {
+                            x = ww - zw;
+                        }
+                        if (y > hh - zh) {
+                            y = hh - zh;
+                        }
+                    }
+                }
+
+                //是否滑块模式，拖动模式
+                if (opts.slider !== false) {
+                    if (opts.sx) {
+                        opts.slider.css('width', x + 'px');
+                        opts.sliding(x / ww);
+                    }
+                    if (opts.sy) {
+                        opts.slider.css('height', y + 'px');
+                        opts.sliding(y / hh);
+                    }
+                } else {
+                    if (opts.sx) {
+                        _this.css('left', x + 'px').css('right', 'auto');
+                    }
+                    if (opts.sy) {
+                        _this.css('top', y + 'px').css('bottom', 'auto');
+                    }
+                }
+
+
+            });
+
+            $(document).mouseup(function() {
+                if ($(this).releaseCapture) {
+                    $(this).releaseCapture();
+                }
+                _this.isDragStart = false;
+            });
+
+        }
+    });
+
+
+    $('.ss-player .btn-drag,.ss-player .progressbar').initDrag({
+        slider: $('.ss-player .currenttime'),
+        sy: false,
+        range: $('.ss-player .progressbar'),
+        sliding: function(p) {
+            var s = p * player.duration;
+            player.currentTime = s;
+        }
+    });
+
+    $('.ss-player').initDrag({
+        range: $('body'),
+        bans: $('.ss-player .progressbar,.ss-player .btn-ctrl')
+    });
+
+
+    $('.ZZZ').initDrag({
+        slider: $('.AAA'),
+        sy: false,
+        range: $('.ZZZ'),
+        sliding: function(p) {
+            $('.BBB').html(Math.round(p * 100) + '%');
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

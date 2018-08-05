@@ -1,0 +1,353 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>a寻路算法-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+ input {
+	width:50px;
+	text-align:center;
+}
+#tip {
+	font-size:30px;
+}
+</style>
+</head>
+<body>
+A*算法4邻域移动：<br>
+	棋盘: <input type="number" value="15"> ×<input type="number" value="14"><br>
+	起点：第<input type="number" value="3">行,第<input type="number" value="2">列<br>
+	终点：第<input type="number" value="13">行,第<input type="number" value="13">)列<br>
+	障碍物个数：<input type="number" value="40"><br>
+	<button id="start">重新开始游戏</button>
+	<div id="map1"></div>
+	<div id="tip"></div>
+
+<script>
+/**
+ * Created by juicy on 2017-11-02.
+ * 
+ * A*算法体现在棋盘初始化时计算好所以可行点的f,g,h值，检测点只有上下左右四个方向，先取f值最小的点组，然后过滤出h最小的，然后再随机取一个点再循环检测直到找到终点或者没有可行点了
+ * 总体步骤如下
+ * 第一步：画棋盘，向外扩展一圈
+ * 第二步：画障碍点和边界，初始化所有点,左上角为（0,0）
+ * 第三步：从起点开始上下左右找扩展点出去，并记录父子点对。从当前已检测点再向外检测，要么检测到终点就停止，要么待检测点全部检测完还找不到终点就停止。
+ * 第四步：画检测的所有点，用红色细线标出，只需要把每个fatherson里的父子连起来就好了(这一步可以不画，跳过)
+ * 第五步：画最终路线，黄色粗线标出。因为子元素的父元素只有一个，而一个父元素有多个子元素（比较难找），所以我们选择从终点往起点找，把能连的线全部连起来就好
+ */
+(function($) {
+    'use strict';
+    $.fn.dragcanvas = function(options) {
+        return new MyDragcanvas(this, options);
+    };
+    var MyDragcanvas = function(element, options) {
+        var me = this;
+        me.$element = element;
+        me.init(options);
+    };
+    // 初始化
+    MyDragcanvas.prototype.init = function(options) {
+        var me = this;
+        // 原型中的this不是指的原型对象，而是调用对象。
+        //用于存地图的长和宽
+        me.opts = $.extend(true, {}, { //用于设弹窗默认值
+            mapXnum: 10,
+            mapYnum: 10,
+            startX: 3,
+            startY: 3,
+            endX: 6,
+            endY: 6,
+            wallnum: 10,
+            map_Per: 40 //每个格子的长度
+        }, options);
+        me.wall = []; //整张图信息，村边界和所有的障碍物的坐标标1，起点标2，终点标3,其余标0，距离左边，距离右边
+        //index从上往下数数，从0开始，下次用二维数组做试试。。。一开始咋先用了一维，做复杂了
+        me.openlist = []; //待检测的点
+        me.closelist = []; //已检测的点
+        me.fatherson = []; //检测过程中记录父子关系对，父节点向上下左右寻找子节点时记录一下
+        var num = 0;
+        for (var i = 0; i < Number(me.opts.mapYnum) + 2; i++) {
+            for (var j = 0; j < Number(me.opts.mapXnum) + 2; j++) {
+                if (i == 0 || i == Number(me.opts.mapYnum) + 1 || j == 0 || j == Number(me.opts.mapXnum) + 1) {
+                    me.wall.push({
+                        status: 1,
+                        pos: [i, j],
+                        f_score: 9999,
+                        index: num++
+                    });
+                } else if (i == me.opts.startY && j == me.opts.startX) {
+                    me.wall.push({
+                        g_score: 0,
+                        status: 2,
+                        pos: [i, j],
+                        index: num++
+                    });
+                } else if (i == me.opts.endY && j == me.opts.endX) {
+                    me.wall.push({
+                        g_score: 0,
+                        h_score: 0,
+                        f_score: 0,
+                        status: 3,
+                        pos: [i, j],
+                        index: num++
+                    });
+                } else {
+                    me.wall.push({
+                        g_score: 0,
+                        h_score: Math.abs(i - me.opts.endY) + Math.abs(j - me.opts.endX),
+                        f_score: 0,
+                        status: 0,
+                        pos: [i, j],
+                        index: num++,
+                        inopen: 0
+                    });
+                }
+            }
+        }
+        //第一步：画棋盘，向外扩展一圈
+        var $map = drawmap(me.opts, me.$element);
+        // 第二步：画障碍点和边界，初始化所有点,左上角为（0,0）
+        drawpoint(me, $map);
+        //这里默认把起点放入已检测点
+        var startnum = posToindex(me.opts.startY, me.opts.startX, me.opts.mapXnum);
+        var endnum = posToindex(me.opts.endY, me.opts.endX, me.opts.mapXnum);
+        me.closelist.push(me.wall[startnum]);
+        //第三步：从起点开始上下左右找扩展点出去，并记录父子点对。如果该点status是0且从未放入过openlist，就放入openlist
+        //从openlist中找F值最小的点组，我这里做了个优化，再次从点组中找h_score最小的点，先找最接近终点的点组（效率更高），若不止一个就随便娶一个放入closelist
+        //从当前已检测点再向外检测，要么检测到终点就停止，要么待检测点全部检测完还找不到终点就停止。
+        searchroad(me, [me.opts.startY, me.opts.startX], startnum);
+        //第四步:画检测的所有点，用红色细线标出，只需要把每个fatherson里的父子连起来就好了(这一步可以不画，跳过)
+        drawroad(me);
+        //第五步：画最终路线，黄色粗线标出。因为子元素的父元素只有一个，而一个父元素有多个子元素（比较难找），所以我们选择从终点往起点找，把能连的线全部连起来就好
+        drawFinalRoad(me.fatherson, startnum, endnum, me);
+        console.log(me)
+    };
+    //开始找路
+    function searchroad(me, XYArray, currentnum) {
+        var currentX = XYArray[0];
+        var currentY = XYArray[1];
+        var num = me.opts.mapXnum;
+        //上下左右判断
+        var top = posToindex(currentX, currentY - 1, num);
+        var bottom = posToindex(currentX, currentY + 1, num);
+        var left = posToindex(currentX - 1, currentY, num);
+        var right = posToindex(currentX + 1, currentY, num);
+        var direction = [top, bottom, left, right];
+        var temp = false;
+        for (var i = 0; i < direction.length; i++) {
+            var obj = direction[i];
+            if (me.wall[obj].status == 0 && me.wall[obj].inopen == 0) {
+                me.openlist.push(me.wall[obj]);
+                me.wall[obj].inopen = 1;
+                me.wall[obj].g_score = me.wall[currentnum].g_score + 1;
+                me.wall[obj].f_score = me.wall[obj].g_score + me.wall[obj].h_score;
+                me.fatherson.push([currentnum, me.wall[obj].index]);
+                var ctx = $("canvas")[0].getContext('2d');
+                ctx.beginPath();
+                ctx.fillStyle = 'black';
+                ctx.font = 'bold 18px arial';
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(me.wall[obj].f_score, me.wall[obj].pos[0] * me.opts.map_Per + me.opts.map_Per / 2, me.wall[obj].pos[1] * me.opts.map_Per + me.opts.map_Per / 2);
+                ctx.beginPath();
+                ctx.font = '12px arial';
+                ctx.fillText(me.wall[obj].g_score, me.wall[obj].pos[0] * me.opts.map_Per + me.opts.map_Per / 5, me.wall[obj].pos[1] * me.opts.map_Per + me.opts.map_Per / 5);
+                ctx.beginPath();
+                ctx.fillText(me.wall[obj].h_score, me.wall[obj].pos[0] * me.opts.map_Per + me.opts.map_Per * 4 / 5, me.wall[obj].pos[1] * me.opts.map_Per + me.opts.map_Per / 5);
+            } else if (me.wall[obj].status == 3) {
+                setTimeout(function() {
+                    $("#tip").html("---------------- 找到终点啦，哈哈哈哈--------------");
+                }, 300)
+                me.fatherson.push([currentnum, me.wall[obj].index]);
+                temp = true;
+                break;
+            }
+        }
+        if (temp)
+            return false
+        if (me.openlist.length == 0) {
+            setTimeout(function() {
+                $("#tip").html("---------------- 无路可走，哈哈哈哈--------------");
+            }, 300)
+            return false
+        }
+        var min = 99999;
+        var min2 = 99999;
+        var minindex = [];
+        var minindex2 = [];
+        $.each(me.openlist, function(i, obj) {
+            if (obj.f_score <= min) {
+                min = obj.f_score;
+            }
+        })
+        $.each(me.openlist, function(i, obj) {
+            if (obj.f_score == min) {
+                minindex.push(i);
+            }
+        })
+
+        // 法三：取h值最小的点
+        // $.each(minindex,function (i,obj) {
+        //     if(me.openlist[obj].h_score<=min2){
+        //         min2=me.openlist[obj].h_score;
+        //     }
+        // })
+        // $.each(minindex,function (i,obj) {
+        //     if(me.openlist[obj].h_score==min2){
+        //          minindex2.push(obj);
+        //     }
+        // })
+        //   var minindexrand=minindex2[parseInt(Math.random()*minindex2.length)];
+        //法一：最慢，随机取一个
+        // var minindexrand = minindex[parseInt(Math.random() * minindex.length)];
+
+        //法二：选择最后加入openlist的点
+        var minindexrand = minindex[minindex.length - 1];
+        me.closelist.push(me.openlist[minindexrand]);
+        me.openlist.splice(minindexrand, 1);
+        searchroad(me, me.closelist[me.closelist.length - 1].pos, me.closelist[me.closelist.length - 1].index);
+    }
+
+    // num为竖方向多少个格子mapYnum
+    function posToindex(x, y, num) {
+        var index = x * (num + 2) + y;
+        return index;
+    }
+
+    function drawroad(me) {
+        var ctx = $("canvas")[0].getContext('2d');
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 1;
+        var fatherson = me.fatherson;
+        $.each(fatherson, function(i, obj) {
+            ctx.moveTo(me.wall[obj[0]].pos[0] * me.opts.map_Per + me.opts.map_Per / 2, me.wall[obj[0]].pos[1] * me.opts.map_Per + me.opts.map_Per / 2);
+            ctx.lineTo(me.wall[obj[1]].pos[0] * me.opts.map_Per + me.opts.map_Per / 2, me.wall[obj[1]].pos[1] * me.opts.map_Per + me.opts.map_Per / 2);
+            ctx.stroke();
+        })
+    }
+
+    //因为子元素的父元素只有一个，而一个父元素有多个子元素，所以我们选择从终点往起点找
+    function drawFinalRoad(fatherson, startnum, endnum, me) {
+        var array = fatherson;
+        var road = [endnum];
+        var current = endnum;
+        while (current != startnum) {
+            var k = 0;
+            for (var j = 0; j < array.length; j++) {
+                if (array[j][1] == current) {
+                    k = 1;
+                    current = array[j][0];
+                    road.push(array[j][0]);
+                }
+            }
+            if (k == 0) {
+                break;
+            }
+        }
+        var ctx = $("canvas")[0].getContext('2d');
+        ctx.beginPath();
+        ctx.strokeStyle = "yellow";
+        ctx.lineWidth = 3;
+        $.each(road.reverse(), function(i, obj) {
+            setTimeout(function() {
+                ctx.lineTo(me.wall[obj].pos[0] * me.opts.map_Per + me.opts.map_Per / 2, me.wall[obj].pos[1] * me.opts.map_Per + me.opts.map_Per / 2);
+                ctx.stroke();
+            }, 100 * i)
+        })
+    }
+
+    //初始化棋盘
+    function drawmap(opts, $element) {
+        var opt = $.extend({}, opts);
+        var canvasWidth = (Number(opt.mapYnum) + 2) * opt.map_Per;
+        var canvasHeight = (Number(opt.mapXnum) + 2) * opt.map_Per;
+        var mapWidth = opt.mapYnum * opt.map_Per;
+        var mapHeight = opt.mapXnum * opt.map_Per;
+        var str = "<canvas width=" + canvasWidth + "  height=" + canvasHeight + "></canvas>";
+        var $str = $(str);
+        $element.append($str);
+        var ctx = $str[0].getContext('2d');
+
+        for (var i = 1; i < Number(opt.mapYnum) + 2; i++) {
+            ctx.beginPath();
+            ctx.moveTo(i * opt.map_Per, 0);
+            ctx.lineTo(i * opt.map_Per, canvasHeight);
+            ctx.strokeStyle = "#aaaaaa";
+            ctx.stroke();
+
+        }
+        for (var j = 1; j < Number(opt.mapXnum) + 2; j++) {
+            ctx.beginPath();
+            ctx.moveTo(0, j * opt.map_Per);
+            ctx.lineTo(canvasWidth, j * opt.map_Per);
+            ctx.strokeStyle = "#aaaaaa";
+            ctx.stroke();
+        }
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 3;
+        ctx.moveTo(opt.map_Per, opt.map_Per);
+        ctx.lineTo(opt.map_Per, opt.map_Per + Number(mapHeight));
+        ctx.lineTo(opt.map_Per + Number(mapWidth), Number(opt.map_Per) + mapHeight);
+        ctx.lineTo(opt.map_Per + Number(mapWidth), opt.map_Per);
+        ctx.lineTo(opt.map_Per, opt.map_Per);
+        ctx.stroke();
+        return $str;
+    }
+
+    //画障碍点和边界，初始化所有点,左上角为（0,0）
+    function drawpoint(me, $map) {
+        var opts = me.opts;
+        var walls = 0;
+        while (walls < opts.wallnum) {
+            var rand = parseInt(((opts.mapXnum + 2) * (opts.mapYnum + 2)) * Math.random()); //取0~12*12
+            var key = me.wall[rand].status;
+            if (key == 0) {
+                me.wall[rand].status = 1;
+                walls++;
+            }
+        }
+        var ctx = $map[0].getContext('2d');
+        $.each(me.wall, function(i, obj) {
+            if (obj.status == 1) {
+                ctx.beginPath();
+                ctx.rect(obj.pos[0] * me.opts.map_Per, obj.pos[1] * me.opts.map_Per, me.opts.map_Per, me.opts.map_Per);
+                ctx.fillStyle = "#999";
+                ctx.fill();
+            } else if (obj.status == 2) {
+                ctx.beginPath();
+                ctx.rect(obj.pos[0] * me.opts.map_Per, obj.pos[1] * me.opts.map_Per, me.opts.map_Per, me.opts.map_Per);
+                ctx.fillStyle = "green";
+                ctx.fill();
+            } else if (obj.status == 3) {
+                ctx.beginPath();
+                ctx.rect(obj.pos[0] * me.opts.map_Per, obj.pos[1] * me.opts.map_Per, me.opts.map_Per, me.opts.map_Per);
+                ctx.fillStyle = "red";
+                ctx.fill();
+            }
+        })
+    }
+})(window.Zepto || window.jQuery)
+
+
+$(function() {
+    $("#start").click(function() {
+        $("#map1,#tip").html("");
+        $("#map1").dragcanvas({
+            mapXnum: Number($("input").get(0).value),
+            mapYnum: Number($("input").get(1).value),
+            startX: Number($("input").get(2).value),
+            startY: Number($("input").get(3).value),
+            endX: Number($("input").get(4).value),
+            endY: Number($("input").get(5).value),
+            wallnum: Number($("input").get(6).value)
+        });
+    })
+
+})
+</script>
+
+</body>
+</html>

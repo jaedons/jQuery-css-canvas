@@ -1,0 +1,247 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>pannel赋值（改）-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+    .box {
+	display:flex;
+	-ms-box-sizing:border-box;
+	box-sizing:border-box;
+}
+.panel {
+	border:1px solid #ddd;
+	width:45%;
+	text-align:center;
+	height:400px;
+	overflow-y:auto;
+}
+.panel_detail {
+	border-bottom:1px solid #ddd;
+	padding:5% 0;
+	cursor:pointer;
+	background:transparent;
+	transition:background .15s ease-in-out;
+}
+.panel_detail.clk {
+	background:lightblue;
+}
+.panel_detail:hover {
+	background:lightblue;
+}
+ul,li {
+	padding:0;
+}
+li {
+	list-style:none;
+}
+.hide {
+	display:none;
+}
+.exchangeCn {
+	margin:0 3%;
+	align-self:center;
+}
+.exchangeCn li {
+	cursor:pointer;
+	border:1px solid #ddd;
+	width:20px;
+	text-align:center;
+	padding:5px;
+	margin:5px;
+}
+</style>
+</head>
+<body>
+<div class="box">
+    <div class="panel panel_all"></div>
+    <div class="exchangeCn">
+        <ul>
+            <li data-exch="g" class="cn_gt">&gt;</li>
+            <li data-exch="l" class="cn_lt">
+                &lt;</li>
+                    <li data-exch="ag" class="cn_gt">&gt;&gt;</li>
+                    <li data-exch="al" class="cn_lt">
+                        &lt;&lt;</li>
+        </ul>
+    </div>
+    <div class="panel panel_add"></div>
+    <div class="hide_val">
+        <input type="hidden" data-name="getData"></div>
+</div>
+<textarea cols="45%" rows="8" name="getData" class="range_change hide">
+</textarea>
+
+<div>
+    <button type="button" onclick="loadData()">加载数据</button>
+</div>
+
+<script>
+   var list1 = [{
+           "id": 1,
+           "inner": "a",
+           "code": 'ars'
+       },
+       {
+           "id": 2,
+           "inner": "b",
+           "code": "back"
+       },
+       {
+           "id": 3,
+           "inner": "c",
+           "code": "caption"
+       },
+       {
+           "id": 3,
+           "inner": "d",
+           "code": "drive"
+       },
+       {
+           "id": 3,
+           "inner": "e",
+           "code": "egg"
+       },
+       {
+           "id": 3,
+           "inner": "f",
+           "code": "fly"
+       },
+       {
+           "id": 3,
+           "inner": "g",
+           "code": "garden"
+       },
+       {
+           "id": 3,
+           "inner": "h",
+           "code": "height"
+       },
+       {
+           "id": 3,
+           "inner": "i",
+           "code": "ice"
+       }
+   ]
+
+   var list2 = [{
+           "id": 2,
+           "inner": "b"
+       },
+       {
+           "id": 5,
+           "inner": "e"
+       },
+       {
+           "id": 8,
+           "inner": "h"
+       },
+       {
+           "id": 9,
+           "inner": "i"
+       }
+   ]
+
+   var strObj = 'b,e,h,i'; //默认已有的选项
+
+   //初始值
+   function loadData() {
+       var arr = [];
+       var panel = document.getElementsByClassName('panel')[0];
+       for (var i = 0, str = ''; i < list1.length; i++) {
+           arr.push(list1[i].inner);
+           str += '<div class="panel_detail">' + list1[i].code + '(' + list1[i].inner + ')</div>';
+       }
+       panel.innerHTML = str;
+       var name = document.querySelector('.hide_val>input').getAttribute('data-name');
+       var inp = document.querySelector('.range_change[name="' + name + '"]');
+       splitData(arr, inp);
+   }
+
+   //已有值
+   function splitData(arr, inp) {
+       var list = strObj.split(',');
+       var main = document.getElementsByClassName('panel_all')[0];
+       var panel = document.getElementsByClassName('panel_add')[0];
+       var reg = /\((\w+)\)/;
+       for (var i = 0; i < arr.length; i++) {
+           var elem = main.children[i];
+           var inner = elem.innerHTML;
+           inner = inner.match(reg)[1];
+           for (var y = 0, str = ''; y < list.length; y++) {
+               str += '<div class="panel_detail">' + list[y] + '</div>';
+               if (list[y] == inner) {
+                   elem.className += ' hide';
+               }
+           }
+       }
+       panel.innerHTML = str;
+       setVal(inp);
+   }
+
+   function setVal(inp) {
+       var panel = document.getElementsByClassName('panel_add')[0].children;
+       var reg = /\((\w+)\)/;
+       for (var i = 0, inner = '', str = ''; i < panel.length; i++) {
+           if (panel[i].className.indexOf('hide') != -1) {
+               continue;
+           }
+           inner = panel[i].innerHTML;
+           if (inner.match(reg)) {
+               inner = inner.match(reg)[1];
+           }
+           str += inner + ',';
+       }
+       str = str.slice(0, str.length - 1);
+       inp.className = inp.className.replace(/\s?hide/, '');
+       inp.value = str;
+   }
+
+   function doSame(tar, str) { //相同操作
+       var ind = 1,
+           idx = 0;
+       if (str == 'g' || str == 'ag') {
+           ind = 0;
+           idx = 1;
+       }
+       var curr = document.querySelectorAll('.panel')[ind].children;
+       var panel = document.getElementsByClassName('panel')[idx];
+       if (curr.length > 0) {
+           for (var i = 0; i < curr.length; i++) {
+               if (str == 'ag' || str == 'al') {
+                   var cls = curr[i].className;
+                   if (cls.indexOf('clk') == -1) {
+                       curr[i].className += ' clk';
+                   }
+               }
+               if (curr[i].className.indexOf('clk') != -1) {
+                   curr[i].className = curr[i].className.replace(/ clk/g, '');
+                   panel.appendChild(curr[i]);
+                   i--;
+               }
+           }
+           var name = document.querySelector('.hide_val>input').getAttribute('data-name');
+           var inp = document.querySelector('.range_change[name="' + name + '"]');
+           setVal(inp);
+       }
+       return false;
+   }
+
+   document.addEventListener('click', function(e) {
+       var ev = window.event || arguments.callee.caller.arguments[0] || e;
+       var tar = ev.target || ev.srcElement;
+       var str = tar.getAttribute('data-exCh');
+       if (str) {
+           doSame(tar, str);
+       }
+       if (tar.className.indexOf('clk') == -1 && tar.className.indexOf('panel_detail') != -1) {
+           tar.className += ' clk';
+           return;
+       }
+       tar.className = tar.className.replace(/ clk/g, '');
+   });
+</script>
+
+</body>
+</html>

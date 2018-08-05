@@ -1,0 +1,147 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>canvas粒子连线-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<style>
+ body {
+	background-color:#005CBA;
+	margin:0;
+	overflow:hidden;
+}
+#canvas {
+	display:block;
+}
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+ var total = 100;
+ var size = 5; //半径
+ var x;
+ var y;
+ var arr = []; //点路径
+ var oldPoint;
+ var PI = Math.PI;
+ var canvas = document.getElementById('canvas');
+ canvas.width = window.innerWidth;
+ canvas.height = window.innerHeight;
+ var ctx = canvas.getContext("2d");
+ ctx.strokeStyle = 'rgba(255,255,255,1)';
+ ctx.fillStyle = 'rgba(255,255,255,.5)';
+ ctx.lineWidth = 1;
+ var opa = 0;
+ vy = 25;
+ vx = 0;
+ gravity = 0.005;
+
+ function distance(x1, y1, x2, y2) {
+     return Math.sqrt(Math.abs(x1 - x2) * Math.abs(x1 - x2) + Math.abs(y1 - y2) * Math.abs(y1 - y2));
+ }
+ //画点
+ for (var i = 0; i < total; i++) {
+     var xx = Math.random() * canvas.width;
+     var yy = Math.random() * canvas.height;
+     arr.push({
+         x: xx,
+         y: yy
+     });
+     ctx.beginPath();
+     ctx.arc(xx, yy, size, 0, 2 * PI);
+     ctx.fill();
+     ctx.save();
+ }
+ oldPoint = arr;
+
+
+ function drawPoint() {
+     $.each(arr, function(i, m) {
+         ctx.beginPath();
+         ctx.arc(m.x, m.y, size, 0, 2 * PI);
+         ctx.fill();
+         ctx.save();
+     })
+ }
+
+ function drawLine() {
+     //画线
+     for (var i = 0; i < arr.length; i++) {
+         for (var j = i + 1; j < arr.length; j++) {
+             var juli = distance(arr[i].x, arr[i].y, arr[j].x, arr[j].y);
+             if (juli >= 120) {
+                 opa = 0;
+             } else {
+                 opa = (juli / 120).toFixed(1);
+                 opa = 1 - opa;
+             }
+             ctx.beginPath();
+             ctx.strokeStyle = 'rgba(255,255,255,' + opa + ')';
+             ctx.moveTo(arr[i].x, arr[i].y);
+             ctx.lineTo(arr[j].x, arr[j].y);
+             ctx.stroke();
+         }
+     }
+ }
+ setInterval(function() {
+     var xx = Math.random() * canvas.width;
+     var yy = Math.random() * canvas.height;
+     arr.push({
+         x: xx,
+         y: yy
+     });
+ }, 300)
+ //循环动画
+
+
+ function loop() {
+     //超出边界删除点
+     $.each(arr, function(i, m) {
+         if (m) {
+             if (m.x < 0 || m.x > canvas.width || m.y < 0 || m.y > canvas.height) {
+                 arr.splice(i, 1)
+             }
+         }
+     })
+     var firsrArr = arr.slice(0, arr.length / 4);
+     var secondArr = arr.slice(arr.length / 4, arr.length / 2);
+     var thirdArr = arr.slice(arr.length / 2, arr.length * 3 / 4);
+     var fourArr = arr.slice(arr.length * 3 / 4, arr.length);
+     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+     //  偏移
+     $.each(firsrArr, function(i, m) {
+         m.x += 0.5;
+     })
+     $.each(firsrArr, function(i, m) {
+         m.y -= 0.3;
+     })
+     $.each(secondArr, function(i, m) {
+         m.y -= 0.25;
+     })
+     $.each(secondArr, function(i, m) {
+         m.x += 0.25;
+     })
+     $.each(thirdArr, function(i, m) {
+         m.x += 0.7;
+     })
+     $.each(thirdArr, function(i, m) {
+         m.y -= 0.1;
+     })
+     $.each(fourArr, function(i, m) {
+         m.y += 0.3;
+     })
+     $.each(fourArr, function(i, m) {
+         m.x -= 0.2;
+     })
+     drawPoint();
+     drawLine();
+     window.requestAnimationFrame(loop);
+ }
+ window.requestAnimationFrame(loop);
+</script>
+
+</body>
+</html>

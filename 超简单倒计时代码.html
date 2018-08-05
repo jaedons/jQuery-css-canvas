@@ -1,0 +1,27 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>超简单倒计时代码-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<span class="time" style="color:brown;font-size:45px;"></span>
+
+<script>
+ var starttime = new Date("2028/8/16");
+ setInterval(function() {
+     var nowtime = new Date();
+     var time = starttime - nowtime;
+     var day = parseInt(time / 1000 / 60 / 60 / 24);
+     var hour = parseInt(time / 1000 / 60 / 60 % 24);
+     var minute = parseInt(time / 1000 / 60 % 60);
+     var seconds = parseInt(time / 1000 % 60);
+     $('.time').html(day + "天" + hour + "时" + minute + "分" + seconds + "秒");
+ }, 1200);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>js仿淘宝条件筛选-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+aside {
+	overflow:hidden
+}
+div {
+	display:inline-block;
+	margin-top:15px;
+}
+i {
+	font-size:14px;
+	color:#666;
+	font-style:normal;
+}
+span {
+	display:inline-block;
+	width:55px;
+	height:24px;
+	text-decoration:none;
+	color:#039;
+	border-radius:2px;
+	font-size:14px;
+	line-height:24px;
+	text-align:center;
+}
+span:hover {
+	cursor:pointer;
+}
+.mystyle {
+	color:#f60;
+	background-color:#f3edc2;
+}
+.last {
+	float:left;
+	color:#666;
+	font-size:14px;
+	margin-top:20px;
+}
+#yi {
+	display:inline-block;
+}
+#yi span {
+	margin-left:10px;
+	color:#f60;
+	background-color:#f3edc2;
+}
+</style>
+</head>
+<body>
+<aside>
+    <i>衣服:</i>
+    <div>
+        <span>针织衫</span>
+        <span>羽绒服</span>
+        <span>卫衣</span>
+        <span>裙子</span>
+    </div>
+</aside>
+<aside>
+    <i>颜色:</i>
+    <div>
+        <span>蓝色</span>
+        <span>红包</span>
+        <span>黄色</span>
+        <span>绿色</span>
+    </div>
+</aside>
+<aside>
+    <i>大小:</i>
+    <div>
+        <span>s</span>
+        <span>m</span>
+        <span>l</span>
+        <span>xl</span>
+    </div>
+</aside>
+<div class="last">已选择:
+    <div id="yi"></div>
+</div>
+
+<script>
+var oDivLength = [];
+var div = document.getElementsByTagName('div');
+var divSpan = document.getElementsByTagName('span');
+//判断有几个列表
+for (var i = 0; i < div.length; i++) {
+    div[i].index = i;
+}
+for (var i = 0; i < divSpan.length; i++) {
+    divSpan[i].onclick = function() {
+        oDivLength[this.parentElement.index] = this.innerText;
+        var oChild = this.parentElement.children;
+        for (var j = 0; j < oChild.length; j++) {
+            oChild[j].className = '';
+        }
+        this.className = 'mystyle'; //已选中的当前列的当前元素添加样式
+        document.getElementById('yi').innerHTML = '';
+        for (var m = 0; m < oDivLength.length; m++) { //放到已选择里面
+            if (oDivLength[m] == '' || oDivLength[m] !== undefined) {
+                var para = document.createElement("span");
+                var node = document.createTextNode(oDivLength[m]);
+                para.appendChild(node);
+                document.getElementById('yi').appendChild(para);
+            }
+        }
+    }
+}
+</script>
+
+</body>
+</html>

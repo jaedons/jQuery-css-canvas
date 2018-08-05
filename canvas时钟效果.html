@@ -1,0 +1,111 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>canvas时钟效果-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+ * {
+	margin:0;
+	padding:0;
+}
+body {
+	background:black;
+}
+#canvas {
+	display:block;
+	background:white;
+	margin:20px auto;
+}
+</style>
+</head>
+<body>
+<canvas id="canvas" width="500" height="500">
+</canvas>
+
+<script>
+var can = document.querySelector("#canvas");
+var ct = can.getContext("2d");
+ct.save();
+ct.beginPath();
+ct.arc(250, 250, 200, 0, Math.PI * 2);
+//    中心点x，y的坐标,半径，起始角，结束角
+ct.stroke();
+ct.restore();
+//刻度
+for (var i = 0; i < 12; i++) {
+    ct.save(); /*保存*/
+    ct.lineWidth = 5; /*线宽*/
+    ct.lineCap = "round"; /*线的末端为圆形*/
+    ct.translate(250, 250); /*旋转中心*/
+    ct.rotate(30 * i * Math.PI / 180);
+    ct.beginPath();
+    ct.moveTo(0, -200); /*开始绘制的点*/
+    ct.lineTo(0, -185); /*下一个点*/
+    ct.stroke(); /*绘制*/
+    ct.closePath(); /*结束绘制*/
+    ct.restore(); /*恢复保存*/
+}
+for (var i = 0; i < 60; i++) {
+    ct.save();
+    ct.lineWidth = 3;
+    ct.lineCap = "round";
+    ct.translate(250, 250);
+    ct.rotate(6 * i * Math.PI / 180);
+    ct.beginPath();
+    ct.moveTo(0, -200);
+    ct.lineTo(0, -190);
+    ct.stroke();
+    ct.restore();
+}
+//    时针
+ct.save();
+ct.translate(250, 250);
+ct.rotate(30 * Math.PI / 180);
+ct.beginPath();
+ct.lineWidth = 6;
+ct.lineCap = "round";
+ct.moveTo(0, 10);
+ct.lineTo(0, -120);
+ct.strokeStyle = "red";
+ct.stroke();
+ct.closePath();
+ct.restore();
+//    分针
+ct.save();
+ct.translate(250, 250);
+ct.rotate(6 * Math.PI / 180);
+ct.beginPath();
+ct.lineWidth = 5;
+ct.lineCap = "round";
+ct.moveTo(0, -140);
+ct.lineTo(0, 10);
+ct.strokeStyle = "blue";
+ct.stroke();
+//    ct.closePath();
+ct.restore();
+
+//    秒针
+ct.save();
+ct.translate(250, 250);
+ct.rotate(60 * Math.PI / 180);
+ct.beginPath();
+ct.lineWidth = 5;
+ct.lineCap = "round";
+ct.moveTo(0, -170);
+ct.lineTo(0, 10);
+ct.strokeStyle = "gray";
+ct.stroke();
+ct.restore();
+//    获取当前时间
+var myDate = new Date();
+var hours = myDate.getHours();
+var minutes = myDate.getMinutes();
+var seconds = myDate.getSeconds();
+hours = hours + minutes / 60;
+hours > 12 ? (hours - 12) : hours;
+ct.restore();
+</script>
+
+</body>
+</html>

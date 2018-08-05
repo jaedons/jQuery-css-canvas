@@ -1,0 +1,27 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>语音合成提示语音-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<button id="fasheng">点我试试</button>
+
+
+<script>
+function fasheng(str) {
+    var url = "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&text=" + encodeURI(str);
+    var n = new Audio(url);
+    n.src = url;
+    n.play();
+}
+$("#fasheng").click(function() {
+    fasheng("你好,请输入你想要的语音提示即可让页面发出声音");
+})
+</script>
+
+</body>
+</html>

@@ -1,0 +1,482 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>鼠标悬停图片展示动画-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+@charset "utf-8";
+	/* CSS reset */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,figure,figcaption {
+	margin:0;
+	padding:0;
+}
+html,body {
+	margin:0;
+	padding:0;
+}
+table {
+	border-collapse:collapse;
+	border-spacing:0;
+}
+fieldset,img {
+	border:0;
+}
+address,caption,cite,code,dfn,th,var {
+	font-style:normal;
+	font-weight:normal;
+}
+ol,ul,li {
+	list-style:none;
+}
+caption,th {
+	text-align:left;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-size:100%;
+	font-weight:normal;
+}
+q:before,q:after {
+	content:'';
+}
+abbr,acronym {
+	border:0;
+}
+.clearfix {
+	*zoom:1;
+}
+.clearfix:before,.clearfix:after {
+	display:table;
+	line-height:0;
+	content:"";
+}
+.clearfix:after {
+	clear:both;
+}
+a {
+	text-decoration:none;
+	text-transform:uppercase
+}
+@charset "utf-8";
+	.clearfix {
+	*zoom:1;
+}
+.clearfix:before,.clearfix:after {
+	display:table;
+	line-height:0;
+	content:"";
+}
+.clearfix:after {
+	clear:both;
+}
+a {
+	text-decoration:none;
+	text-transform:uppercase
+}
+.one {
+	width:400px;
+	display:inline-block;
+	margin-top:20px;
+	margin-bottom:40px;
+	margin-left:20px;
+	margin-left:20px;
+}
+.one .bba {
+	position:relative;
+	transform-style:preserve-3d;
+	perspective:1000px;
+}
+.one .bba .tu {
+	overflow:hidden;
+}
+.one .bba .di {
+	height:260px;
+	width:40%;
+	opacity:0;
+	position:absolute;
+	top:0;
+	left:0;
+	padding:20px;
+	background:#2c3f52;
+	color:#ed4e6e;
+	transform-origin:left center;
+	transform:rotateY(-90deg);
+	transition:transform 0.4s,opacity 0.1s;
+}
+.one .bba img {
+	width:400px;
+	height:300px;
+	display:block;
+	position:relative;
+	-moz-transition:all 0.3s 0.1s;
+	-webkit-transition:all 0.3s 0.1s;
+	-o-transition:all 0.3s 0.1s;
+}
+.one .bba .di h3 {
+	color:#fff;
+}
+.one .bba .di a {
+	position:absolute;
+	bottom:20px;
+	right:20px;
+	text-align:center;
+	padding:5px 10px;
+	border-radius:6px;
+	display:inline-block;
+	background:#ed4e6e;
+	color:#fff;
+}
+.one .bba:hover img {
+	transform:translateX(25%);
+}
+.one .bba:hover .di {
+	perspective-origin:left center;
+	opacity:1;
+	transform:rotateY(0deg);
+}
+.two {
+	width:400px;
+	display:inline-block;
+	margin-top:20px;
+	margin-bottom:40px;
+	margin-left:20px;
+}
+.two .bba {
+	position:relative;
+}
+.two .bba .tu {
+	max-width:100%;
+	position:relative;
+	z-index:99;
+	top:0px;
+	left:0px;
+	overflow:hidden;
+}
+.two .bba .di {
+	width:360px;
+	height:80px;
+	position:absolute;
+	top:0;
+	left:0;
+	padding:200px 20px 20px;
+	background:#2c3f52;
+	color:#ed4e6e;
+}
+.two .bba img {
+	width:400px;
+	height:300px;
+	display:block;
+	position:relative;
+	-moz-transition:all 0.4s;
+	-webkit-transition:all 0.4s;
+	-o-transition:all 0.4s;
+}
+.two .bba .di h3 {
+	color:#fff;
+}
+.two .bba .di a {
+	position:absolute;
+	bottom:20px;
+	right:20px;
+	text-align:center;
+	padding:5px 10px;
+	border-radius:6px;
+	display:inline-block;
+	background:#ed4e6e;
+	color:#fff;
+}
+.two .bba:hover img {
+	top:-30px;
+	transform:scale(0.5)
+}
+.three {
+	width:400px;
+	display:inline-block;
+	bottom:20px;
+	margin-bottom:40px;
+	margin-left:20px;
+}
+.three .bba {
+	position:relative;
+}
+.three .bba .tu {
+	width:100%;
+	position:relative;
+	z-index:99;
+}
+.three .bba .tu img {
+	width:400px;
+	height:300px;
+	transform:scale(1);
+	-moz-transition:transform 0.4s;
+	-webkit-transition:transform 0.4s;
+	-o-transition:transform 0.4s;
+}
+.three .bba .di {
+	transform:scale(0.5);
+	height:100%;
+	width:380px;
+	position:absolute;
+	top:0;
+	left:0;
+	padding-left:20px;
+	background:#2c3f52;
+	color:#ed4e6e;
+	-moz-transition:transform 0.4s;
+	-webkit-transition:transform 0.4s;
+	-o-transition:transform 0.4s;
+}
+.three .bba .di h3 {
+	color:#fff;
+	padding-top:20px;
+}
+.three .bba .di span {
+	display:block;
+}
+.three .bba .di a {
+	position:absolute;
+	bottom:20px;
+	right:20px;
+	text-align:center;
+	padding:5px 10px;
+	border-radius:6px;
+	display:inline-block;
+	background:#ed4e6e;
+	color:#fff;
+}
+.three .bba:hover .di {
+	transform:scale(1);
+}
+.three .bba:hover img {
+	transform:scale(0.5);
+}
+.four {
+	width:400px;
+	display:inline-block;
+	margin-top:20px;
+	margin-bottom:40px;
+	margin-left:20px;
+}
+.four .bba {
+	position:relative;
+}
+.four .bba .tu {
+	max-width:100%;
+	position:relative;
+	top:0px;
+	left:0px;
+}
+.four .bba .tu img {
+	display:block;
+	width:400px;
+	height:300px
+}
+.four .bba .di {
+	opacity:0;
+	width:100%;
+	height:300px;
+	position:absolute;
+	top:0;
+	left:0;
+	background:#2c3f52;
+	color:#ed4e6e;
+	text-align:center;
+	-moz-transition:all 0.4s;
+	-webkit-transition:all 0.4s;
+	-o-transition:all 0.4s;
+}
+.four .bba .di h3 {
+	color:#fff;
+	margin-top:100px;
+}
+.four .bba .di a {
+	text-align:center;
+	padding:5px 10px;
+	display:block;
+	background:#ed4e6e;
+	color:#fff;
+	width:140px;
+	margin-left:120px;
+	margin-top:20px;
+}
+.four .bba:hover .di {
+	opacity:1;
+	transform:translate(10px,10px);
+}
+.five {
+	width:400px;
+	display:inline-block;
+	bottom:20px;
+	margin-bottom:40px;
+	margin-left:20px;
+}
+.five .bba {
+	position:relative;
+}
+.five .bba .tu {
+	max-width:100%;
+	position:relative;
+	z-index:99;
+	top:0px;
+	left:0px;
+}
+.five .bba .di {
+	width:360px;
+	height:70px;
+	position:absolute;
+	top:0;
+	left:0;
+	padding:210px 20px 20px;
+	background:#2c3f52;
+	color:#ed4e6e;
+}
+.five .bba img {
+	width:400px;
+	height:300px;
+	display:block;
+	position:relative;
+	-moz-transition:all 0.4s;
+	-webkit-transition:all 0.4s;
+	-o-transition:all 0.4s;
+}
+.five .bba .di h3 {
+	color:#fff;
+}
+.five .bba .di a {
+	position:absolute;
+	bottom:20px;
+	right:20px;
+	text-align:center;
+	padding:5px 10px;
+	border-radius:6px;
+	display:inline-block;
+	background:#ed4e6e;
+	color:#fff;
+}
+.five .bba:hover img {
+	transform:translateY(-100px);
+}
+.six {
+	width:400px;
+	display:inline-block;
+	bottom:20px;
+	margin-bottom:40px;
+	margin-left:20px;
+}
+.six .bba {
+	position:relative;
+}
+.six .bba .tu {
+	overflow:hidden;
+}
+.six .bba .di {
+	opacity:0;
+	width:360px;
+	height:70px;
+	position:absolute;
+	bottom:-100px;
+	left:0;
+	padding:10px 20px 20px;
+	background:#2c3f52;
+	color:#ed4e6e;
+	transition:transform 0.4s,opacity 0s;
+}
+.six .bba img {
+	width:400px;
+	height:300px;
+	display:block;
+	position:relative;
+	-moz-transition:all 0.3s 0.1s;
+	-webkit-transition:all 0.3s 0.1s;
+	-o-transition:all 0.3s 0.1s;
+}
+.six .bba .di h3 {
+	color:#fff;
+}
+.six .bba .di a {
+	position:absolute;
+	bottom:20px;
+	right:20px;
+	text-align:center;
+	padding:5px 10px;
+	display:inline-block;
+	background:#ed4e6e;
+	color:#fff;
+}
+.six .bba:hover img {
+	transform:translateY(-17%);
+}
+.six .bba:hover .di {
+	opacity:1;
+	transform:translateY(-100px);
+}
+</style>
+</head>
+<body>
+<div class="one">
+    <div class="bba">
+        <div class="tu"><img src="http://www.jq22.com/img/cs/500x300-1.png"></div>
+        <div class="di">
+            <h3>Safari</h3>
+            <span>by Jacob Cummings</span>
+            <a href="###">Take a look</a>
+        </div>
+    </div>
+</div>
+<div class="two">
+    <div class="bba">
+        <div class="tu"><img src="http://www.jq22.com/img/cs/500x300-1.png"></div>
+        <div class="di">
+            <h3>Camera</h3>
+            <span>Jacob Cummings</span>
+            <a href="###">Take a look</a>
+        </div>
+    </div>
+</div>
+<div class="three">
+    <div class="bba">
+        <div class="tu"><img src="http://www.jq22.com/img/cs/500x300-1.png"></div>
+        <div class="di">
+            <h3>Camera</h3>
+            <span>Jacob Cummings</span>
+            <a href="###">Take a look</a>
+        </div>
+    </div>
+</div>
+<div class="four">
+    <div class="bba">
+        <div class="tu"><img src="http://www.jq22.com/img/cs/500x300-1.png"></div>
+        <div class="di">
+            <h3>Camera</h3>
+            <span>Jacob Cummings</span>
+            <a href="###">Take a look</a>
+        </div>
+    </div>
+</div>
+<div class="five">
+    <div class="bba">
+        <div class="tu"><img src="http://www.jq22.com/img/cs/500x300-1.png"></div>
+        <div class="di">
+            <h3>Camera</h3>
+            <span>Jacob Cummings</span>
+            <a href="###">Take a look</a>
+        </div>
+    </div>
+</div>
+<div class="six">
+    <div class="bba">
+        <div class="tu"><img src="http://www.jq22.com/img/cs/500x300-1.png"></div>
+        <div class="di">
+            <h3>Camera</h3>
+            <span>Jacob Cummings</span>
+            <a href="###">Take a look</a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+</script>
+
+</body>
+</html>

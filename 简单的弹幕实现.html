@@ -1,0 +1,140 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>简单的弹幕实现-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+.context {
+	width:800px;
+	height:300px;
+	border:1px solid #ccc;
+	display:-webkit-box;
+	-webkit-box-orient:horizontal;
+	position:relative;
+}
+.dm-y-list {
+	width:200px;
+	height:300px;
+	border-left:1px solid #ccc;
+	position:relative;
+}
+.send-dm {
+	width:200px;
+	height:34px;
+	border:1px solid #ccc;
+	position:absolute;
+	bottom:0;
+	left:0;
+}
+.dm-list-top {
+	width:100%;
+	height:30px;
+	font-size:16px;
+	text-align:center;
+	line-height:30px;
+	border-bottom:1px solid #ccc;
+}
+.send-dm input {
+	width:116px;
+	height:30px;
+	float:left;
+	border:1px solid #ccc;
+}
+.send-dm button {
+	width:80px;
+	height:34px;
+	float:left;
+	background:#0188FB;
+	border:none;
+	color:white;
+}
+.dm-list-cont {
+	width:200px;
+	height:236px;
+	overflow:auto;
+}
+.dm-font-y {
+	width:100%;
+	height:auto;
+	font-size:12px;
+	margin-top:10px;
+	white-space:pre-wrap;
+}
+.dm-font-x {
+	width:auto;
+	overflow:hidden;
+	height:30px;
+	color:white;
+	line-height:30px;
+	text-align:center;
+	margin-left:600px;
+	position:absolute;
+	opacity:1;
+}
+.bg {
+	width:600px;
+	height:300px;
+	z-index:999;
+	background:rgba(0,0,0,.1);
+	position:absolute;
+	top:0;
+	left:0;
+	overflow:hidden;
+}
+</style>
+</head>
+<body>
+<div class="context">
+    <div class="bg">
+
+    </div>
+    <video width="600" height="300">
+			 <source src="video/movie (2).mp4" type="video/mp4">
+		</video>
+    <div class="dm-y-list">
+        <div class="dm-list-top">弹幕列表</div>
+        <div class="dm-list-cont">
+            <div class="dm-font">
+                <font style="font-size: 14px;">空巢老人：</font>这是什么啊</div>
+        </div>
+        <div class="send-dm">
+            <input type="text" maxlength="10">
+            <button class="sendBtn">发送弹幕</button>
+        </div>
+    </div>
+</div>
+
+<script>
+$('.sendBtn').on('click', function() {
+    var dmtxt = $(this).prev().val();
+    if (dmtxt != '') {
+        var arr = ['blue', 'red', 'green', 'skyblue', 'orange'];
+        var bgHeight = $('.bg').height();
+        var j = Math.floor(Math.random() * bgHeight);
+        if (j < 0) {
+            j = 0
+        } else if (j > 240) {
+            j = 270
+        }
+        var i = Math.floor(Math.random() * arr.length);
+        var div = "<div class='dm-font-y'><font style='font-size: 14px;'>空巢老人：<font color='" + arr[i] + "'>" + dmtxt + "</font></div>";
+        var div2 = "<div class='dm-font-x' style='position:absolute;top:" + j + "px'><font color='" + arr[i] + "'>" + dmtxt + "</font></div>";
+        $('.bg').append(div2);
+        var x = $('.bg').children('div:last').offset();
+        $('.bg').children('div:last').animate({
+            marginLeft: -100 + 'px'
+        }, 8000, 'linear', function() {
+            $(this).remove();
+        });
+        $('.dm-list-cont').append(div);
+        $(this).prev().val('');
+        $('.dm-list-cont').scrollTop($('.dm-list-cont')[0].scrollHeight);
+    } else {
+        alert('请输入弹幕信息');
+    }
+})
+</script>
+
+</body>
+</html>

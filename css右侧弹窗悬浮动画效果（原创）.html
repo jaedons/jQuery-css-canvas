@@ -1,0 +1,119 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>右侧弹窗悬浮动画效果（原创）-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+#rbutton {
+	position:fixed;
+	right:0px;
+	top:50%;
+	width:80px;
+	height:80px;
+	transition:right 1s;
+	z-index:999;
+}
+#rot {
+	position:absolute;
+	top:0px;
+	animation:rot 8s linear infinite;
+}
+circle[Attributes Style] {
+	r:33;
+	cx:40;
+	cy:40;
+	stroke:green;
+	stroke-width:1;
+	fill:transparent;
+}
+circle[Attributes Style] {
+	r:5;
+	cx:35;
+	cy:6;
+	fill:green;
+}
+circle[Attributes Style] {
+	r:26;
+	cx:50%;
+	cy:50%;
+	fill:green;
+}
+#rot2 {
+	position:absolute;
+	top:0px;
+	animation:rot 12s linear infinite;
+}
+circle[Attributes Style] {
+	r:33;
+	cx:40;
+	cy:40;
+	stroke:green;
+	stroke-width:1;
+	fill:transparent;
+}
+circle[Attributes Style] {
+	r:6;
+	cx:6;
+	cy:40;
+	fill:green;
+}
+@-webkit-keyframes rot {
+	0% {
+	-webkit-transform:rotatez(0deg) rotatez(180deg);
+}
+100% {
+	-webkit-transform:rotatez(180deg) rotatez(360deg);
+}
+}#rbutton .in a {
+	position:absolute;
+	left:20px;
+	top:20px;
+	width:40px;
+	height:40px;
+	display:flex;
+	flex-wrap:wrap;
+	justify-content:space-around;
+	line-height:1;
+	font-size:16px;
+	text-decoration:none;
+	color:#fff;
+}
+</style>
+</head>
+<body>
+<div id="rbutton" style="right: 20%;">
+    <svg width="100%" height="100%" id="rot">
+    <circle r="33" cx="40" cy="40" stroke="red" stroke-width="1" fill="transparent"></circle>
+    <circle r="5" cx="35" cy="6" fill="red"></circle>
+    <circle r="26" cx="50%" cy="50%" fill="red"></circle>
+  </svg>
+    <svg width="100%" height="100%" id="rot2">
+    <circle r="33" cx="40" cy="40" stroke="red" stroke-width="1" fill="transparent"></circle>
+    <circle r="6" cx="6" cy="40" fill="red"></circle>
+  </svg>
+    <div class="in">
+        <a href="javascript:void(0);" onclick="openZoosUrl();LR_HideInvite();return false">
+            <span>点击</span>
+            <span>咨询</span></a>
+    </div>
+</div>
+
+
+<script>
+ $(window).scroll(function() {
+     var stop = $(document).scrollTop();
+     if (stop >= 200) {
+         $("#rbutton").css({
+             "right": "0px"
+         });
+     } else {
+         $("#rbutton").css({
+             "right": "-40px"
+         });
+     }
+ })
+</script>
+
+</body>
+</html>

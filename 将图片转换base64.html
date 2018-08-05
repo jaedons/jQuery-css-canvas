@@ -1,0 +1,35 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>将图片转换base64-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+<style>
+.jg {
+	word-wrap:break-word;
+}
+</style>
+</head>
+<body>
+<input type="file" id="picFile" onchange="readFile(this)">
+<div class="jg"></div>
+
+<script>
+ function readFile(obj) {
+     var file = obj.files[0];
+     //判断类型是不是图片
+     if (!/image\/\w+/.test(file.type)) {
+         alert("请确保文件为图像类型");
+         return false;
+     }
+     var reader = new FileReader();
+     reader.readAsDataURL(file);
+     reader.onload = function(e) {
+         //alert(this.result); //就是base64
+         $(".jg").text(this.result);
+     }
+ }
+</script>
+
+</body>
+</html>

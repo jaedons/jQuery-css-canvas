@@ -1,0 +1,53 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>模仿雪花飞舞-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+* {
+	margin:0px;
+	padding:0px;
+}
+body {
+	position:relative;
+	height:1000px;
+	width:100%;
+	overflow:hidden;
+}
+span {
+	display:block;
+	opacity:0.7;
+}
+</style>
+</head>
+<body>
+
+
+<script>
+$(function() {
+    setInterval(function() {
+        var maxW = document.body.clientWidth,
+            maxH = document.body.clientHeight,
+            left = Math.random() * maxW,
+            bottom = left - (Math.random() - 0.5) * 0.2 * maxW, //保证落下的位置水平有变化，但不大
+            opacity = 0.7 + 0.3 * Math.random();
+        speed = 30;
+        size = 20 + 10 * Math.random(), //字体20-30
+            color = '#f00';
+        num = Math.floor(Math.random() * 10) //产生0-9随机数，当然你们可以自己设置
+        var style = 'position:absolute;top:0px;font-size:' + size + 'px;color:' + color + ';left:' + left + 'px;opacity:' + opacity;
+        var div = '<span class = "dd" style="' + style + '">' + num + '</span>'
+        $('body').append(div)
+        $('span').animate({
+            top: maxH,
+            left: bottom
+        }, 3000, function() {
+            $(this).remove() //这一步很关键，要把落下的去掉，不然会越积越多
+        });
+    }, 20) //20ms产生一个		
+})
+</script>
+
+</body>
+</html>

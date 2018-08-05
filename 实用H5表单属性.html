@@ -1,0 +1,72 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>实用H5表单属性-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+        fieldset {
+	width:50%;
+	margin:0 auto;
+	padding:20px;
+}
+input {
+	width:100%;
+	height:40px;
+	line-height:40px;
+	border:none;
+	border:1px solid #cccccc;
+	border-radius:4px;
+	padding-left:10px;
+	margin:5px 0;
+}
+meter {
+	width:100%;
+	height:40px;
+	line-height:40px;
+	border:none;
+	border:1px solid #cccccc;
+	border-radius:4px;
+	margin:5px 0;
+}
+</style>
+</head>
+<body>
+<form action="">
+    <fieldset>
+        <legend>学生档案</legend>
+        <label for="userName">姓名:</label><br>
+        <input type="text" name="userName" id="userName" placeholder="请输入用户名">
+        <label for="userPhone">手机:</label>
+        <input type="tel" id="userPhone" name="userPhone" placeholder="请输入手机号码">
+        <label for="userEmail">邮箱:</label>
+        <input type="email" id="userEmail" name="userEmail" placeholder="请输入邮箱">
+        <label for="school">所属学院:</label>
+        <input type="text" list="obj" placeholder="选择学院" id="school">
+        <datalist id="obj">
+        <option value="前端学院"></option>
+        <option value="后端学院"></option>
+        <option value="UI设计"></option>
+    </datalist>
+        <label for="score">入学成绩:</label>
+        <input type="number" max="100" min="0" value="0" id="score">
+        <label for="level">基础水平:</label>
+        <meter id="level" max="100" min="0" low="59" high="90"></meter>
+        <label for="joinDate">入学日期:</label>
+        <input type="date" id="joinDate" name="joinDate">
+        <label for="leaveDate">毕业日期:</label>
+        <input type="date" id="leaveDate" name="leaveDate">
+        <input type="submit">
+    </fieldset>
+</form>
+
+<script>
+ var score = document.getElementById("score");
+ var level = document.getElementById("level");
+ score.oninput = function() {
+     level.value = this.value;
+ }
+</script>
+
+</body>
+</html>

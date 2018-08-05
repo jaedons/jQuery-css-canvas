@@ -1,0 +1,525 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>仿qq聊天消息发送-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<style>
+@charset "utf-8";
+	/* CSS Document */
+
+* {
+	font-family:helvetica;
+	appearance:none;
+	-webkit-appearance:none;
+	-moz-appearance:none;
+	border:0;
+	margin:0;
+	padding:0;
+}
+input::-webkit-input-placeholder {
+	color:#ccc;
+	font-size:14px;
+}
+input:-ms-input-placeholder {
+	// IE10+
+    color:#ccc;
+	font-size:14px;
+}
+input:-moz-placeholder {
+	// Firefox4-18
+    color:#ccc;
+	font-size:14px;
+}
+input::-moz-placeholder {
+	// Firefox19+
+    color:#ccc;
+	font-size:14px;
+}
+ul {
+	list-style:none;
+}
+a {
+	text-decoration:none;
+	color:#333;
+}
+input {
+	border:1px solid #ccc;
+}
+p {
+	margin:0;
+}
+.title {
+	position:absolute;
+	display:block;
+	width:100%;
+	padding:0;
+	margin:0 -.5rem;
+	font-size:.85rem;
+	font-weight:500;
+	line-height:2.2rem;
+	color:#3d4145;
+	text-align:center;
+	white-space:nowrap;
+	left:0;
+	top:0;
+}
+.bar .icon {
+	position:relative;
+	z-index:20;
+	padding:.5rem .1rem;
+	font-size:1rem;
+	line-height:1.2rem;
+}
+a:active {
+	color:#0a8ddf;
+}
+a:active,a:hover {
+	outline:0;
+}
+.pull-right {
+	float:right;
+}
+.icon {
+	font-family:iconfont-sm!important;
+	font-style:normal;
+	-webkit-font-smoothing:antialiased;
+	-webkit-text-stroke-width:.2px;
+	-moz-osx-font-smoothing:grayscale;
+}
+.page {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+	background:#efeff4;
+}
+.bar-nav {
+	top:0;
+}
+.bar {
+	position:absolute;
+	right:0;
+	left:0;
+	z-index:10;
+	height:2.2rem;
+	padding-right:.5rem;
+	padding-left:.5rem;
+	background-color:#f7f7f8;
+	border-bottom:1px solid #e7e7e7;
+	-webkit-backface-visibility:hidden;
+	backface-visibility:hidden;
+}
+.bar-tab {
+	bottom:0;
+	z-index:9000;
+	width:100%;
+	height:2.5rem;
+	padding:0;
+	table-layout:fixed;
+	border-top:1px solid #e7e7e7;
+	border-bottom:0;
+	border-left:0;
+	-webkit-transition-duration:.4s;
+	-o-transition-duration:.4s;
+	transition-duration:.4s;
+}
+.talk_record {
+	position:absolute;
+	top:2.2rem;
+	width:100%;
+	height:89%;
+	/*background:#eff0f2;
+	*/
+	background:white;
+	overflow-y:scroll;
+}
+.talk_recordboxme {
+	/*border:1px solid #ccc;
+	*/
+    display:block;
+	color:#afafaf;
+	padding:5px 0px 5px 0px;
+	overflow:hidden;
+	margin:5px;
+}
+.talk_recordbox {
+	/*border:1px solid #ccc;
+	*/
+    display:block;
+	color:#afafaf;
+	/*padding:5px 10px 5px 10px;
+	*/
+    overflow:hidden;
+	margin:5px;
+}
+.talk_recordboxme .user {
+	background:#a6d4f2;
+	float:right;
+	margin:0 2px 0px 2px;
+	font-size:12px;
+	line-height:20px;
+	text-align:center;
+	display:inline;
+	padding:5px 12px;
+	border-radius:15px;
+	color:#333;
+}
+.talk_recordbox .user {
+	background:#dbd8d5;
+	float:left;
+	margin:0 2px 0px 2px;
+	font-size:12px;
+	line-height:20px;
+	text-align:center;
+	display:inline;
+	padding:5px 12px;
+	border-radius:15px;
+	color:#333;
+}
+.talk_recordboxme .talk_recordtext {
+	float:right;
+	/*background:white;
+	*/
+	background:#a6d4f2;
+	padding:12px 12px;
+	border-radius:15px;
+	margin-right:20px;
+	max-width:185px;
+}
+.talk_recordbox .talk_recordtext {
+	float:left;
+	background:#dbd8d5;
+	padding:12px 12px;
+	border-radius:15px;
+	margin-left:20px;
+	max-width:185px;
+}
+.talk_recordtext > p {
+	font-size:13px;
+	color:#333;
+	font-family:helvetica;
+}
+.talk_recordtext > span {
+	font-size:12px;
+	color:#333;
+}
+.talk_recordtext {
+	position:relative;
+}
+.talk_recordboxme .talk_recordtextbg {
+	position:relative;
+	float:right;
+}
+.talk_recordboxme .talk_recordtextbg {
+	width:0;
+	height:0;
+	border:solid #ccc;
+	/*border-width:1px 15px 9px 18px;
+	*/
+    border-width:1px 18px 9px 15px;
+	border-color:transparent transparent transparent #a6d4f2;
+	position:absolute;
+	top:10px;
+	right:-28px;
+}
+/*.talk_recordbox .talk_recordtextbg {
+	position:relative;
+	float:right;
+}
+*/
+.talk_recordbox .talk_recordtextbg {
+	width:0;
+	height:0;
+	border:solid #ccc;
+	/*border-width:15px 2px 15px 15px;
+	*/
+	border-width:1px 15px 9px 18px;
+	border-color:transparent #dbd8d5 transparent transparent;
+	position:absolute;
+	top:10px;
+	left:-28px;
+}
+/*输入键盘*/
+.page #send-btn[disabled] {
+	background:#ccc;
+	color:white;
+}
+#textInput {
+	display:block;
+	float:left;
+	width:10rem;
+	height:1.8rem;
+	margin-top:0.34rem;
+	margin-left:1rem;
+}
+#picture-btn {
+	display:block;
+	float:left;
+	width:1.8rem;
+	height:1.4rem;
+	margin-top:0.40rem;
+	margin-left:1.6rem;
+	background:#f7f7f8;
+}
+#send-btn {
+	display:block;
+	float:left;
+	width:2.5rem;
+	height:1.5rem;
+	line-height:1.5rem;
+	margin-top:0.50rem;
+	margin-left:1.2rem;
+	background:#f7f7f8;
+	border:1px solid #ccc;
+	font-size:13px;
+	border-radius:.4rem;
+}
+#speak-btn {
+	display:block;
+	float:left;
+	width:1.8rem;
+	height:1.4rem;
+	margin-top:0.40rem;
+	margin-left:1.7rem;
+	background:#f7f7f8;
+}
+#picture-btn span,#speak-btn span {
+	font-size:24px;
+	line-height:27px;
+}
+.talk_recordtext p {
+	word-wrap:break-word;
+}
+.voice-case {
+	margin-top:2.2rem;
+	width:100%;
+}
+.voice-content {
+	width:100%;
+	height:14.4rem;
+}
+.voice-content img {
+	width:100%;
+	height:100%;
+}
+.button-case {
+	position:relative;
+	width:33.3%;
+	float:left;
+	height:100%;
+	text-align:center;
+}
+.sendVoice-btn {
+	background:white;
+	border:1px solid #ccc;
+	width:58px;
+	height:58px;
+	border-radius:29px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-29px;
+	margin-top:-29px;
+}
+.voice-case {
+	display:none;
+}
+.speakVoice-btn {
+	background:white;
+	border:1px solid #ccc;
+	width:84px;
+	height:84px;
+	border-radius:42px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-42px;
+	margin-top:-42px;
+	background:red;
+}
+.button-case .speakVoice-btn span.fa {
+	color:red;
+}
+.resetVoice-btn {
+	background:white;
+	border:1px solid #ccc;
+	width:58px;
+	height:58px;
+	border-radius:29px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-29px;
+	margin-top:-29px;
+}
+#speakVoice-end {
+	background:white;
+}
+#speakVoice-end span.fa {
+	color:red!important;
+}
+.button-case button:nth-child(2) span.fa {
+	color:#666;
+	font-size:1rem;
+	margin-top:5px;
+}
+.button-case span {
+	color:#2196f3;
+}
+.button-case button:nth-child(2) {
+	display:none;
+}
+#speakVoice-disabled span.fa-circle {
+	color:red;
+}
+.sendVoice-disabled span.fa-circle {
+	color:#ccc;
+}
+#resetVoice-disabled span.fa-circle {
+	color:#ccc;
+}
+</style>
+</head>
+<body>
+<div class="page">
+    
+    
+    <div class="chat-case">
+        <header id="person-listOne" class="bar bar-nav">
+            <a class="icon icon-left pull-left"></a>
+            <h1 class="title">刘国林</h1>
+            <a class="icon icon-me pull-right"></a>
+        </header>
+        <div class="talk_record">
+            <div class="talkContainer">
+                <div class="talk_recordboxme">
+                    <div class="user">刘军</div>
+                    <div class="talk_recordtext">
+                        <p>今天天气不错</p>
+                        <span class="talk_recordtextbg"></span>
+                    </div>
+                </div>
+                <div class="talk_recordbox">
+                    <div class="user">刘国林</div>
+                    <div class="talk_recordtext">
+                        <p>你吃饭了没有！</p>
+                        <span class="talk_recordtextbg"></span>
+                    </div>
+                </div>
+                <div class="talk_recordboxme">
+                    <div class="user">刘军</div>
+                    <div class="talk_recordtext">
+                        <p>晚上一起去打游戏吧</p>
+                        <span class="talk_recordtextbg"></span>
+                    </div>
+                </div>
+                <div class="talk_recordbox">
+                    <div class="user">刘国林</div>
+                    <div class="talk_recordtext">
+                        <p>不好哦</p>
+                        <span class="talk_recordtextbg"></span>
+                    </div>
+                </div>
+                <div class="talk_recordboxme">
+                    <div class="user">刘军</div>
+                    <div class="talk_recordtext">
+                        <p>好的</p>
+                        <span class="talk_recordtextbg"></span>
+                    </div>
+                </div>
+                <div class="talk_recordbox">
+                    <div class="user">刘国林</div>
+                    <div class="talk_recordtext">
+                        <p>明白</p>
+                        <span class="talk_recordtextbg"></span>
+                    </div>
+                </div>
+            </div>
+            <a id="miao_dian" href="#miao_dian" name="miao_dian" class="clear"></a>
+        </div>
+
+        <nav id="speak-bar" class="bar bar-tab">
+            <input id="textInput" type="text" value="">
+            <button id="send-btn" type="button" disabled="disabled">发送</button>
+            <button id="picture-btn" type="button">
+				    	<span class="fa fa-image"></span>
+				    </button>
+            <button id="speak-btn" type="button">
+				    	<span class="fa fa-microphone"></span>
+				    </button>
+
+        </nav>
+    </div>
+    
+
+</div>
+
+<script>
+$(function() {
+
+    //设定聊天区的高度
+    var Height = $(".page").height(); //整个框架高度
+    console.log(Height);
+    var headerHeight = $("#person-listOne").height()
+    var navHeight = $("#speak-bar").height()
+    var height = Height - headerHeight - navHeight;
+    $(".talk_record").height(height);
+    if (!!window.ActiveXObject || "ActiveXObject" in window) {
+        console.log("ie")
+        $(document).on("propertychange", "#textInput", function() {
+            if ($("#textInput").val() != "") {
+                console.log(0)
+                $("#send-btn").removeAttr("disabled");
+            } else {
+                console.log(1)
+                $("#send-btn").attr("disabled", "disabled");
+            }
+
+        });
+    } else {
+        console.log("非ie")
+        $(document).on("input", "#textInput", function() {
+            if ($("#textInput").val() != "") {
+                console.log(0)
+                $("#send-btn").removeAttr("disabled");
+            } else {
+                console.log(1)
+                $("#send-btn").attr("disabled", "disabled");
+            }
+
+        });
+    }
+
+    //点击发送，聊天文字函数
+    $(document).on("click", "#send-btn", function() {
+        var val = $("#textInput").val()
+        //alert(val);
+        var tem = "";
+
+        tem = '<div class="talk_recordboxme">' +
+            '<div class="user">' + '刘军' + '</div>' +
+            '<div class="talk_recordtext">' +
+            '<p>' + val + '</p>' +
+            '<span class="talk_recordtextbg"></span>' +
+            '</div>' +
+            '</div>'
+        if (val = null || val == "") {
+            console.log("内容为空")
+        } else {
+            $(".talkContainer").append(tem);
+            $(".talk_record").scrollTop($(".talkContainer").height() - $("talk_record").height());
+        }
+        $("#textInput").val("");
+        $("#send-btn").attr("disabled", "disabled");
+    });
+
+
+});
+</script>
+
+</body>
+</html>

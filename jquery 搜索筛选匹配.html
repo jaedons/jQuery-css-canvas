@@ -1,0 +1,77 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jquery 搜索筛选匹配-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<style>
+tr {
+	padding:0;
+	margin:0;
+	border:1px solid #000;
+	height:40px;
+	line-height:40px;
+	text-align:center;
+}
+td,th {
+	border:1px solid #000;
+}
+</style>
+</head>
+<body>
+<input type="text" placeholder="搜索" id="search" onkeyup="searchFun(this)">
+<table id="trList">
+    <tbody><tr>
+        <th>种类</th>
+    </tr>
+    <tr>
+        <td datatype="ETH_BTC">ETH_BTC</td>
+    </tr>
+    <tr>
+        <td datatype="LTC_BTC">LTC_BTC</td>
+    </tr>
+    <tr>
+        <td datatype="ADA_BTC">ADA_BTC</td>
+    </tr>
+    <tr>
+        <td datatype="EOS_BTC">EOS_BTC</td>
+    </tr>
+    <tr>
+        <td datatype="aaa_BTC">aaa_BTC</td>
+    </tr>
+    <tr>
+        <td datatype="abc_BTC">abc_BTC</td>
+    </tr>
+    <tr>
+        <td datatype="bbb_BTC">bbb_BTC</td>
+    </tr>
+    <tr>
+        <td datatype="CCC_BTC">CCC_BTC</td>
+    </tr>
+    <tr>
+        <td datatype="DDD_BTC">DDD_BTC</td>
+    </tr>
+</tbody></table>
+
+<script>
+function searchFun(obj) {
+    if ($(obj).val() != "") {
+        $("#trList tr").show();
+        var thisVal = $(obj).val();
+        var dataType = "";
+        var posiTion = "";
+        $.each($("#trList tr td"), function(i, item) {
+            dataType = $(this).attr("datatype")
+            posiTion = dataType.indexOf(thisVal);
+            if (posiTion == -1) {
+                $(this).parent().hide()
+            }
+        });
+    } else {
+        $("#trList tr").show();
+    }
+}
+</script>
+
+</body>
+</html>

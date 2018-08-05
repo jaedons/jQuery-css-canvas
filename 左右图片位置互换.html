@@ -1,0 +1,152 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>左右图片位置互换-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<style>
+#box img {
+	width:200px;
+	height:115px;
+	border:2px solid #000;
+	cursor:pointer;
+}
+li {
+	padding:0;
+	margin:0;
+	float:left;
+	list-style:none;
+	margin-right:10px;
+	position:relative;
+}
+li .btn {
+	display:none;
+	width:202px;
+	height:40px;
+	background-color:#000;
+	position:absolute;
+	top:0;
+	left:0;
+	opacity:0.6;
+}
+li .btn a {
+	display:block;
+	width:30px;
+	height:20px;
+	background-color:red;
+}
+li .btn a.previous {
+	float:left;
+}
+li .btn a.next {
+	float:right;
+}
+</style>
+</head>
+<body>
+<ul id="box">
+    <li>
+        <img src="http://www.jq22.com/img/cs/500x300-1.png" alt="">
+        <div class="btn">
+            <a href="javascript:;" class="previous"></a>
+            <a href="javascript:;" class="next"></a>
+        </div>
+    </li>
+    <li>
+        <img src="http://www.jq22.com/img/cs/500x300-2.png" alt="">
+        <div class="btn">
+            <a href="javascript:;" class="previous"></a>
+            <a href="javascript:;" class="next"></a>
+        </div>
+    </li>
+    <li>
+        <img src="http://www.jq22.com/img/cs/500x300-3.png" alt="">
+        <div class="btn">
+            <a href="javascript:;" class="previous"></a>
+            <a href="javascript:;" class="next"></a>
+        </div>
+    </li>
+    <li>
+        <img src="http://www.jq22.com/img/cs/500x300-4.png" alt="">
+        <div class="btn">
+            <a href="javascript:;" class="previous"></a>
+            <a href="javascript:;" class="next"></a>
+        </div>
+    </li>
+    <li>
+        <img src="http://www.jq22.com/img/cs/500x300-5.png" alt="">
+        <div class="btn">
+            <a href="javascript:;" class="previous"></a>
+            <a href="javascript:;" class="next"></a>
+        </div>
+    </li>
+    <li>
+        <img src="http://www.jq22.com/img/cs/500x300-6.png" alt="">
+        <div class="btn">
+            <a href="javascript:;" class="previous"></a>
+            <a href="javascript:;" class="next"></a>
+        </div>
+    </li>
+</ul>
+
+<script>
+$(function() {
+    $("#box li").on('mouseover', function() {
+        $(this).find(".btn").show();
+    }).mouseout(function() {
+        $(this).find(".btn").hide();
+    });
+
+    //获取所有图片或者li的索引
+    var allIndex = $("#box li").size() - 1;
+
+    $(".previous").on('click', function() {
+        //获取当前点击的图片索引
+        var index = $(this).parents('li').index();
+        if (index <= 0 || index > allIndex) {
+            return;
+        }
+
+        //拿到当前所点击的图片
+        var thisImg = $(this).parents('li').find('img');
+
+        //获取当前点击图片的src
+        var thisImgSrc = thisImg.attr('src');
+
+        //获取到上一个图片
+        var previousImg = $("#box").find('li').eq(index - 1).find('img');
+
+        //获取上一个图片的src
+        var previousImgSrc = previousImg.attr('src');
+
+        thisImg.attr('src', previousImgSrc);
+        previousImg.attr('src', thisImgSrc);
+    });
+
+    $(".next").on('click', function() {
+        var index = $(this).parents('li').index();
+
+        if (index >= allIndex) {
+            return;
+        }
+
+        //拿到当前所点击的图片
+        var thisImg = $(this).parents('li').find('img');
+
+        //获取当前点击图片的src
+        var thisImgSrc = thisImg.attr('src');
+
+        //获取到下一个图片
+        var nextImg = $("#box").find('li').eq(index + 1).find('img');
+
+        //获取到下一个图片的src
+        var nextImgSrc = nextImg.attr('src');
+
+        thisImg.attr('src', nextImgSrc);
+        nextImg.attr('src', thisImgSrc);
+    });
+});
+</script>
+
+</body>
+</html>

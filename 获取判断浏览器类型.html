@@ -1,0 +1,58 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>获取判断浏览器类型-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+div {
+	color:blue;
+}</style>
+</head>
+<body>
+<div>您使用的是<span class="dmjg"></span>浏览器（请在不同浏览器环境下查看显示效果）</div>
+<script>
+    $(document).ready(function() {　　
+        $(".dmjg").html(getBrowserVersion());
+    });
+</script>
+
+<script>
+// 获取浏览器版本
+function getBrowserVersion() {
+	var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+	var version = "";
+	var browsers = navigator.appName;
+	var b_version = navigator.appVersion;
+	var version = b_version.split(";");
+	var trim_Version = (version[1]) ? version[1].replace(/[ ]/g, "") : version[0].replace(/[ ]/g, "");
+	var isOpera = userAgent.indexOf("Opera") > -1;
+	if(userAgent.indexOf("Opera") > -1) {
+		return "Opera"
+	} else if(userAgent.indexOf("Firefox") > -1) {
+		return "FF";
+	} else if(userAgent.indexOf("Chrome") > -1) {
+		return "Chrome";
+	} else if(userAgent.indexOf("Safari") > -1) {
+		return "Safari";
+	} else if(userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+		if(browsers == "Microsoft Internet Explorer" && trim_Version == "MSIE6.0") {
+			version = "IE 6";
+		} else if(browsers == "Microsoft Internet Explorer" && trim_Version == "MSIE7.0") {
+			version = "IE 7";
+		} else if(browsers == "Microsoft Internet Explorer" && trim_Version == "MSIE8.0") {
+			version = "IE 8";
+		} else if(browsers == "Microsoft Internet Explorer" && trim_Version == "MSIE9.0") {
+			version = "IE 9";
+		} else if(browsers == "Microsoft Internet Explorer" && trim_Version == "MSIE10.0") {
+			version = "IE 10";
+		}
+	} else if(browsers = "Netscape" && trim_Version == "WOW64") {
+		version = "IE 11";
+	}
+	return version;
+};
+</script>
+
+</body>
+</html>

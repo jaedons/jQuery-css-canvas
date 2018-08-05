@@ -1,0 +1,436 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Canvas画的组织结构图-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+* {
+	padding:0;
+	margin:0;
+	list-style:none;
+}
+.zu_map {
+	width:1206px;
+	height:500px;
+	border:1px solid #000;
+}
+.graph {
+	width:100%;
+	height:50px;
+	overflow:hidden;
+}
+.graph p {
+	text-align:center;
+	width:200px;
+	float:left;
+	height:50px;
+	line-height:50px;
+	background-color:#468e33;
+	border-right:1px solid #fff;
+	color:#fff;
+}
+#container_0 div,#container_1 div,#container_2 div,#container_3 div,#container_4 div,#container_5 div {
+	border:1px solid #E0E0E0;
+	border-radius:5px;
+	width:150px;
+	height:30px;
+	line-height:30px;
+	margin:20px  0;
+	text-align:center;
+	cursor:pointer;
+}
+.cont {
+	float:left;
+	width:150px;
+	height:450px;
+	padding:0 25px;
+}
+.map {
+	position:relative;
+}
+.container_node {
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+}
+.background_new {
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+}
+.background_new div {
+	float:left;
+	width:200px;
+	height:450px;
+}
+.background {
+	background:#ededed;
+}
+.myCanvas {
+	position:absolute;
+	left:0;
+	top:-50px;
+}
+.back_1 {
+	background:#0064ca;
+	color:#fff;
+}
+.back_2 {
+	background:#b200cc;
+	color:#fff;
+}
+.back_3 {
+	background:#00a900;
+	color:#fff;
+}
+.back_4 {
+	background:#ff6c00;
+	color:#fff;
+}
+.back_5 {
+	background:#00909d;
+	color:#fff;
+}
+.back_6 {
+	background:#ff0000;
+	color:#fff;
+}
+</style>
+</head>
+<body>
+<div class="zu_map">
+    <div class="graph">
+        <p>资源</p>
+        <p>节目</p>
+        <p>安排</p>
+        <p>计划</p>
+        <p>分屏</p>
+        <p>终端</p>
+    </div>
+    <div class="map">
+        <div class="background_new">
+            <div class="background"></div>
+            <div class=""></div>
+            <div class="background"></div>
+            <div class=""></div>
+            <div class="background"></div>
+            <div class=""></div>
+        </div>
+        <canvas class="myCanvas" id="myCanvas" width="1200px" height="500px"></canvas>
+        <div class="container_node">
+            <div id="container_0" class="cont"></div>
+            <div id="container_1" class="cont"></div>
+            <div id="container_2" class="cont"></div>
+            <div id="container_3" class="cont"></div>
+            <div id="container_4" class="cont"></div>
+            <div id="container_5" class="cont"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+        var node_width = 150;//节点宽度
+        var node_height = 60;//节点高度
+        function  Node(no, uuid, parent_id, txt, type) {
+            this.no = no;//序号
+            this.id = uuid;//id 要确保不重复
+            this.parent_id=parent_id;  //parentId
+            //this.child_id=child_id;
+            this.txt = txt;
+            this.type = type;
+        }
+
+
+        //gju资源cjjd
+         var node_list_0 = new Array();
+         node_list_0[0] = new Node(0, "p5719ce0c-a276-4f71-9715-3776d724d06f", "", "资源", "zyb");
+         node_list_0[1] = new Node(1, "p50b5a322-6441-0a7c-c83d-75461891f780", "", "资源", "zyb");
+         node_list_0[2] = new Node(2, "pw719ce0c-a276-4f71-9715-3776d724d43q", "", "资源", "zyb");
+         node_list_0[3] = new Node(3, "paa9387e4-2b3d-416e-e974-db8993b2be8b", "", "资源", "zyb");
+         node_list_0[4] = new Node(4, "peaa12c24-a6cf-3e06-6741-0010c345adab", "", "资源", "zyb");
+         console.log(node_list_0)
+         //显示结点
+         for (var i = 0; i < node_list_0.length; i++) {
+         $("#container_0").append("<div class='node zyb' id='" + node_list_0[i].id + "' parent_id='" + node_list_0[i].parent_id + "'>" + node_list_0[i].txt + "-" + (i + 1) + "</div>");
+         node_list_0[i].top = $("#" + node_list_0[i].id).offset().top;
+         node_list_0[i].left = $("#" + node_list_0[i].id).offset().left;
+         node_list_0[i].right = $("#" + node_list_0[i].id).offset().left + node_width;
+         node_list_0[i].id = $("#" + node_list_0[i].id).attr("id");
+         node_list_0[i].parent_id = $("#" + node_list_0[i].id).attr("parent_id");
+         $("#" + node_list_0[i].id).css("border","1px solid #0064ca");
+         $("#" + node_list_0[i].id).css("box-shadow", "1px 1px 5px #888888");
+         //            $("#" + node_list_0[i].id).css("background", "#fff");
+         }
+
+        //节目
+        var node_list_1 = new Array();
+        node_list_1[0] = new Node(0, "skksksksks-snsis-sjsjsj", "pw719ce0c-a276-4f71-9715-3776d724d43q", "节目", "jm");
+        node_list_1[1] = new Node(1, "ssisla-shnsnsj-sksksk", "p5719ce0c-a276-4f71-9715-3776d724d06f", "节目", "jm");
+        node_list_1[2] = new Node(2, "soisooasoa-sksksks-1122", "re719ce0c-a276-4f71-9715-3776d724d06q", "节目", "jm");
+        node_list_1[3] = new Node(3, "sosppaoaso-snskiss-skss", "p5719ce0c-a276-4f71-9715-3776d724d06f", "节目", "jm");
+        node_list_1[4] = new Node(4, "ssoso-shsis-siyis-uawi", "p5719ce0c-a276-4f71-9715-3776d724d06f", "节目", "jm");
+
+        //显示结点
+        for (var i = 0; i < node_list_1.length; i++) {
+            $("#container_1").append("<div class='node jm' id='" + node_list_1[i].id + "' parent_id='" + node_list_1[i].parent_id + "'>" + node_list_1[i].txt + "-" + (i + 1) + "</div>");
+            node_list_1[i].top = $("#" + node_list_1[i].id).offset().top;
+            node_list_1[i].left = $("#" + node_list_1[i].id).offset().left;
+            node_list_1[i].right = $("#" + node_list_1[i].id).offset().left + node_width;
+            node_list_1[i].id = $("#" + node_list_1[i].id).attr("id");
+            node_list_1[i].parent_id = $("#" + node_list_1[i].id).attr("parent_id");
+            $("#" + node_list_1[i].id).css("border","1px solid #b200cc");
+            $("#" + node_list_1[i].id).css("box-shadow", "1px 1px 5px #888888");
+        }
+        //安排
+        var node_list_2 = new Array();
+        node_list_2[0] = new Node(0, "lh5441c-a276-4f71-9715-37761b09e", "skksksksks-snsis-sjsjsj", "安排", "rap");
+        node_list_2[1] = new Node(1, "qwq1b30f-cf05-81ea-e926-b40345adab", "sadfsksks-snfsis-sjsjsj", "安排", "rap");
+        node_list_2[2] = new Node(2, "da4sd454s322-6441-0a7c-c83d-7891f780", "srtuuksks-snsis-sjsjsj", "安排", "rap");
+        node_list_2[3] = new Node(3, "zxg87e4-2b3d-416e-e974-db8993b2be8b", "ssisla-shnsnsj-sksksk", "安排", "rap");
+        node_list_2[4] = new Node(4, "vf24-a6cf-3e06-6741-0010d724d06f", "svbsla-shnsnsj-sksksk", "安排", "rap");
+
+        //显示结点
+        for (var i = 0; i < node_list_2.length; i++) {
+            $("#container_2").append("<div class='node rap' id='" + node_list_2[i].id + "' parent_id='" + node_list_2[i].parent_id + "'>" + node_list_2[i].txt + "-" + (i + 1) + "</div>");
+            node_list_2[i].top = $("#" + node_list_2[i].id).offset().top;
+            node_list_2[i].left = $("#" + node_list_2[i].id).offset().left;
+            node_list_2[i].right = $("#" + node_list_2[i].id).offset().left + node_width;
+            node_list_2[i].id = $("#" + node_list_2[i].id).attr("id");
+            node_list_2[i].parent_id = $("#" + node_list_2[i].id).attr("parent_id");
+            $("#" + node_list_2[i].id).css("border","1px solid #00a900");
+            $("#" + node_list_2[i].id).css("box-shadow", "1px 1px 5px #888888");
+        }
+        //计划
+        var node_list_3 = new Array();
+        node_list_3[0] = new Node(0, "t44gfs11w447-ass1-d24q2-qwee-qweqwwebgs", "mnas322-6441-0a7c-c83d-75461891f780", "计划", "bfjh");
+        node_list_3[1] = new Node(1, "sdweb30f-cf05-81wea-e926-b409c345aq", "vf24-a6cf-3e06-6741-0010d724d06f", "计划", "bfjh");
+        node_list_3[2] = new Node(2, "ghaed-6441-0a7c-c83d-75461891f780", "qwq1b30f-cf05-81ea-e926-b40345adab", "计划", "bfjh");
+        node_list_3[3] = new Node(3, "ncd87e4-2b3d-416e-e974-db8993b2bd3a", "vf24-a6cf-3e06-6741-0010d724d06f", "计划", "bfjh");
+        node_list_3[4] = new Node(4, "cvda12c24-a6cf-3e06-6741-0010d724dadq", "ssisla-shnsnsj-skmhsk", "计划", "bfjh");
+
+        //显示结点
+        for (var i = 0; i < node_list_3.length; i++) {
+            $("#container_3").append("<div class='node rap' id='" + node_list_3[i].id + "' parent_id='" + node_list_3[i].parent_id + "'>" + node_list_3[i].txt + "-" + (i + 1) + "</div>");
+            node_list_3[i].top = $("#" + node_list_3[i].id).offset().top;
+            node_list_3[i].left = $("#" + node_list_3[i].id).offset().left;
+            node_list_3[i].right = $("#" + node_list_3[i].id).offset().left + node_width;
+            node_list_3[i].id = $("#" + node_list_3[i].id).attr("id");
+            node_list_3[i].parent_id = $("#" + node_list_3[i].id).attr("parent_id");
+            $("#" + node_list_3[i].id).css("border","1px solid #ff6c00");
+            $("#" + node_list_3[i].id).css("box-shadow", "1px 1px 5px #888888");
+        }
+        var node_list_4 = new Array();
+        node_list_4[0] = new Node(0, "784asfq11-asdasdq2-qweqwe-qweqweqweqs", "sosppaoaso-snskiss-skss", "分屏", "zdz");
+        node_list_4[1] = new Node(1, "65442eb30f-cf05-81wea-e926-b409c345aq", "t44gfs11w447-ass1-d24q2-qwee-qweqwwebgs", "分屏", "zdz");
+        node_list_4[2] = new Node(2, "545aaed-6441-0a7c-c83d-75461891f780", "skksksksks-snsis-sjsjsj", "分屏", "zdz");
+        node_list_4[3] = new Node(3, "636ad87e4-2b3d-416e-e974-db8993b2bd3a", "ghaed-6441-0a7c-c83d-75461891f780", "分屏", "zdz");
+        node_list_4[4] = new Node(4, "457a12c24-a6cf-3e06-6741-0010d724dadq", "ssisla-shnsnsj-sksksk", "分屏", "zdz");
+
+        //显示结点
+        for (var i = 0; i < node_list_4.length; i++) {
+            $("#container_4").append("<div class='node rap' id='" + node_list_4[i].id + "' parent_id='" + node_list_4[i].parent_id + "'>" + node_list_4[i].txt + "-" + (i + 1) + "</div>");
+            node_list_4[i].top = $("#" + node_list_4[i].id).offset().top;
+            node_list_4[i].left = $("#" + node_list_4[i].id).offset().left;
+            node_list_4[i].right = $("#" + node_list_4[i].id).offset().left + node_width;
+            node_list_4[i].id = $("#" + node_list_4[i].id).attr("id");
+            node_list_4[i].parent_id = $("#" + node_list_4[i].id).attr("parent_id");
+            $("#" + node_list_4[i].id).css("border","1px solid #00909d");
+            $("#" + node_list_4[i].id).css("box-shadow", "1px 1px 5px #888888");
+        }
+        var node_list_5 = new Array();
+        node_list_5[0] = new Node(0, "784asfq11-asdasdq2-qweqwe-qweqweqweqs", "sosppaoaso-snskiss-skss", "终端", "zdz");
+        node_list_5[1] = new Node(1, "65442eb30f-cf05-81wea-e926-b409c345aq", "t44gfs11w447-ass1-d24q2-qwee-qweqwwebgs", "终端", "zdz");
+        node_list_5[2] = new Node(2, "545aaed-6441-0a7c-c83d-75461891f780", "skksksksks-snsis-sjsjsj", "终端", "zdz");
+        node_list_5[3] = new Node(3, "636ad87e4-2b3d-416e-e974-db8993b2bd3a", "ghaed-6441-0a7c-c83d-75461891f780", "终端", "zdz");
+        node_list_5[4] = new Node(4, "457a12c24-a6cf-3e06-6741-0010d724dadq", "ssisla-shnsnsj-sksksk", "终端", "zdz");
+
+        //显示结点
+        for (var i = 0; i < node_list_5.length; i++) {
+            $("#container_5").append("<div class='node rap' id='" + node_list_5[i].id + "' parent_id='" + node_list_5[i].parent_id + "'>" + node_list_5[i].txt + "-" + (i + 1) + "</div>");
+            node_list_5[i].top = $("#" + node_list_5[i].id).offset().top;
+            node_list_5[i].left = $("#" + node_list_5[i].id).offset().left;
+            node_list_5[i].right = $("#" + node_list_5[i].id).offset().left + node_width;
+            node_list_5[i].id = $("#" + node_list_5[i].id).attr("id");
+            node_list_5[i].parent_id = $("#" + node_list_5[i].id).attr("parent_id");
+            $("#" + node_list_5[i].id).css("border","1px solid #ff0000");
+            $("#" + node_list_5[i].id).css("box-shadow", "1px 1px 5px #888888");
+        }
+        link();
+        //连接结点
+        function link() {
+            var c = document.getElementById("myCanvas");
+            var cxt = c.getContext("2d");
+            cxt.lineWidth = 2;
+            for (var i = 0; i < node_list_0.length; i++) {
+                //var color= $(node_list_0[i]).color=getColor();
+                for (var j = 0; j < node_list_1.length; j++) {
+                    if (node_list_1[i].parent_id == node_list_0[j].id) {
+                        cxt.beginPath();
+                        cxt.moveTo(node_list_0[j].right, node_list_0[j].top + 15);
+                        cxt.lineTo(node_list_0[j].right + 8+j+8, node_list_0[j].top + 15);
+
+                        cxt.moveTo(node_list_0[j].right + 8+j+8, node_list_0[j].top + 15);
+                        cxt.lineTo(node_list_1[i].left - 8+i-8, node_list_1[i].top + 15);
+
+                        cxt.moveTo(node_list_1[i].left - 8+i-8, node_list_1[i].top + 15);
+                        cxt.lineTo(node_list_1[i].left, node_list_1[i].top + 15);
+                        cxt.closePath();
+                    }
+                }
+                cxt.strokeStyle = "#888";
+                cxt.stroke();
+            }
+            for (var i = 0; i < node_list_1.length; i++) {
+                //var color= $(node_list_1[i]).color=getColor();
+                for (var j = 0; j < node_list_2.length; j++) {
+                    if (node_list_2[i].parent_id == node_list_1[j].id) {
+                        cxt.beginPath();
+                        cxt.moveTo(node_list_1[j].right, node_list_1[j].top + 15);
+                        cxt.lineTo(node_list_1[j].right + 8+j+8, node_list_1[j].top + 15);
+
+                        cxt.moveTo(node_list_1[j].right + 8+j+8, node_list_1[j].top + 15);
+                        cxt.lineTo(node_list_2[i].left - 8+i-8, node_list_2[i].top + 15);
+
+                        cxt.moveTo(node_list_2[i].left - 8+i-8, node_list_2[i].top + 15);
+                        cxt.lineTo(node_list_2[i].left, node_list_2[i].top + 15);
+                        cxt.closePath();
+                    }
+                }
+                cxt.strokeStyle = "#888";
+                cxt.stroke();
+            }
+            for (var i = 0; i < node_list_2.length; i++) {
+                //$(node_list_0[i]).style.background="blue";
+                //var color= $(node_list_2[i]).color=getColor();
+                for (var j = 0; j < node_list_3.length; j++) {
+                    if (node_list_3[i].parent_id == node_list_2[j].id) {
+                        cxt.beginPath();
+                        cxt.moveTo(node_list_2[j].right, node_list_2[j].top + 15);
+                        cxt.lineTo(node_list_2[j].right + 8+j+8, node_list_2[j].top + 15);
+
+                        cxt.moveTo(node_list_2[j].right + 8+j+8, node_list_2[j].top + 15);
+                        cxt.lineTo(node_list_3[i].left - 8+i-8, node_list_3[i].top + 15);
+
+                        cxt.moveTo(node_list_3[i].left - 8+i-8, node_list_3[i].top + 15);
+                        cxt.lineTo(node_list_3[i].left, node_list_3[i].top + 15);
+                        cxt.closePath();
+                    }
+                }
+                cxt.strokeStyle = "#888";
+                cxt.stroke();
+            }
+            for (var i = 0; i < node_list_3.length; i++) {
+                //$(node_list_0[i]).style.background="blue";
+                //var color= $(node_list_3[i]).color=getColor();
+                for (var j = 0; j < node_list_4.length; j++) {
+                    if (node_list_4[i].parent_id == node_list_3[j].id) {
+                        cxt.beginPath();
+                        cxt.moveTo(node_list_3[j].right, node_list_3[j].top + 15);
+                        cxt.lineTo(node_list_3[j].right + 8+j+8, node_list_3[j].top + 15);
+
+                        cxt.moveTo(node_list_3[j].right + 8+j+8, node_list_3[j].top + 15);
+                        cxt.lineTo(node_list_4[i].left - 8+i-8, node_list_4[i].top + 15);
+
+                        cxt.moveTo(node_list_4[i].left - 8+i-8, node_list_4[i].top + 15);
+                        cxt.lineTo(node_list_4[i].left, node_list_4[i].top + 15);
+                        cxt.closePath();
+                    }
+                }
+                cxt.strokeStyle = "#888";
+                cxt.stroke();
+            }
+            for (var i = 0; i < node_list_4.length; i++) {
+                //$(node_list_0[i]).style.background="blue";
+                //var color= $(node_list_3[i]).color=getColor();
+                for (var j = 0; j < node_list_5.length; j++) {
+                    if (node_list_5[i].parent_id == node_list_4[j].id) {
+                        cxt.beginPath();
+                        cxt.moveTo(node_list_4[j].right, node_list_4[j].top + 15);
+                        cxt.lineTo(node_list_4[j].right + 8+j+8, node_list_4[j].top + 15);
+
+                        cxt.moveTo(node_list_4[j].right + 8+j+8, node_list_5[j].top + 15);
+                        cxt.lineTo(node_list_5[i].left - 8+i-8, node_list_5[i].top + 15);
+
+                        cxt.moveTo(node_list_5[i].left - 8+i-8, node_list_5[i].top + 15);
+                        cxt.lineTo(node_list_5[i].left, node_list_5[i].top + 15);
+                        cxt.closePath();
+                    }
+                }
+                cxt.strokeStyle = "#888";
+                cxt.stroke();
+            }
+        }
+        click();
+        function click(){
+            for(var i=0;i<node_list_0.length;i++){//点击资源包
+                $("#"+node_list_0[i].id).click(function(){
+                    $(this).parent().parent().children().children().removeClass();//删除所有的class
+                    $(this).parent().children().removeClass("back_1");
+                    $(this).addClass("back_1");
+                    console.log($(this).attr("id"))
+                });
+            }
+            for(var i=0;i<node_list_1.length;i++){//点击节目
+                $("#"+node_list_1[i].id).click(function(){
+                    $(this).parent().parent().children().children().removeClass();//删除所有的class
+                    $(this).parent().children().removeClass("back_2");
+                    $(this).addClass("back_2");
+                    console.log($(this).attr("id"))
+                });
+            }
+            for(var i=0;i<node_list_2.length;i++){//点击日安排
+                $("#"+node_list_2[i].id).click(function(){
+                    $(this).parent().parent().children().children().removeClass();//删除所有的class;
+                    $(this).parent().children().removeClass("back_3");
+                    $(this).addClass("back_3");
+                    console.log($(this).attr("id"))
+                });
+            }
+            for(var i=0;i<node_list_3.length;i++){//点击播放计划
+                $("#"+node_list_3[i].id).click(function(){
+                    $(this).parent().parent().children().children().removeClass();//删除所有的class
+                    $(this).parent().children().removeClass("back_4");
+                    $(this).addClass("back_4");
+                    console.log($(this).attr("id"))
+                });
+            }
+            for(var i=0;i<node_list_4.length;i++){//点击终端
+                $("#"+node_list_4[i].id).click(function(){
+                    $(this).parent().parent().children().children().removeClass();//删除所有的class
+                    $(this).parent().children().removeClass("back_5");
+                    $(this).addClass("back_5");
+                    console.log($(this).attr("id"))
+                });
+            }
+            for(var i=0;i<node_list_5.length;i++){//点击终端
+                $("#"+node_list_5[i].id).click(function(){
+                    $(this).parent().parent().children().children().removeClass();//删除所有的class
+                    $(this).parent().children().removeClass("back_6");
+                    $(this).addClass("back_6");
+                    console.log($(this).attr("id"))
+                });
+            }
+        }
+
+        /*//封装的颜色
+         function getColor() {
+         var colorValue = "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f";
+         var colorArray = colorValue.split(",");
+         var color = "#";
+         for (var i = 0; i < 6; i++) {
+         color += colorArray[Math.floor(Math.random() * 16)];
+         }
+         return color;
+         }*/
+    });
+</script>
+
+</body>
+</html>

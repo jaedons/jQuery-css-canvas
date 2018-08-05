@@ -1,0 +1,144 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>星星评分插件-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+#starRating .photo span {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 42px;
+    overflow: hidden;
+    margin-right: 23px;
+    cursor: pointer;
+}
+#starRating .photo span:last-child {
+    margin-right: 0px;
+}
+#starRating .photo span .nohigh {
+    position: absolute;
+    width: 44px;
+    height: 42px;
+    top: 0;
+    left: 0;
+    background: url("http://www.jq22.com/tp/98643a06-224f-4a72-9fca-bd35b2246a64.png");
+}
+#starRating .photo span .high {
+    position: absolute;
+    width: 44px;
+    height: 42px;
+    top: 0;
+    left: 0;
+    background: url("http://www.jq22.com/tp/edd338fb-79eb-4c67-8b4d-7eb98689faba.png");
+}
+#starRating .starNum {
+    font-size: 26px;
+    color: #de4414;
+    margin-top: 4px;
+    margin-bottom: 10px;
+}
+#starRating .bottoms {
+    height: 54px;
+    border-top: 1px solid #d8d8d8;
+}
+#starRating .photo {
+    margin-top: 30px;
+}
+#starRating .bottoms a {
+    margin-bottom: 0;
+}
+#starRating .bottoms .garyBtn {
+    margin-right: 57px!important;
+}
+#starRating .bottoms a {
+    width: 130px;
+    height: 35px;
+    line-height: 35px;
+    border-radius: 3px;
+    display: inline-block;
+    font-size: 16px;
+    transition: all 0.2s linear;
+    margin: 16px 0 22px;
+    text-align: center;
+    cursor: pointer;
+}
+.garyBtn {
+    margin-right: 60px!important;
+    background-color: #e1e1e1;
+    color: #999999;
+}
+.blueBtn {
+    background-color: #1968b1;
+    color: #fff;
+}
+.blueBtn:hover {
+    background: #0e73d0;
+}</style>
+</head>
+<body>
+<div id="starRating">
+    <p class="photo">
+        <span><i class="high"></i><i class="nohigh"></i></span>
+        <span><i class="high"></i><i class="nohigh"></i></span>
+        <span><i class="high"></i><i class="nohigh"></i></span>
+        <span><i class="high"></i><i class="nohigh"></i></span>
+        <span><i class="high"></i><i class="nohigh"></i></span>
+    </p>
+    <p class="starNum">0.0分</p>
+    <div class="bottoms">
+        <a class="garyBtn cancleStar">取消评分</a><a class="blueBtn sureStar">确认</a>
+    </div>
+</div>
+
+
+<script>
+$(function () {
+        //评分
+        var starRating = 0;
+        $('.photo span').on('mouseenter',function () {
+            var index = $(this).index()+1;
+            $(this).prevAll().find('.high').css('z-index',1)
+            $(this).find('.high').css('z-index',1)
+            $(this).nextAll().find('.high').css('z-index',0)
+            $('.starNum').html((index*2).toFixed(1)+'分')
+        })
+        $('.photo').on('mouseleave',function () {
+            $(this).find('.high').css('z-index',0)
+            var count = starRating / 2
+            if(count == 5) {
+                $('.photo span').find('.high').css('z-index',1);
+            } else {
+                $('.photo span').eq(count).prevAll().find('.high').css('z-index',1);
+            }
+            $('.starNum').html(starRating.toFixed(1)+'分')
+        })
+        $('.photo span').on('click',function () {
+            var index = $(this).index()+1;
+            $(this).prevAll().find('.high').css('z-index',1)
+            $(this).find('.high').css('z-index',1)
+            starRating = index*2;
+            $('.starNum').html(starRating.toFixed(1)+'分');
+            alert('评分：'+(starRating.toFixed(1)+'分'))
+        })
+        //取消评分
+        $('.cancleStar').on('click',function () {
+            starRating = 0;
+            $('.photo span').find('.high').css('z-index',0);
+            $('.starNum').html(starRating.toFixed(1)+'分');
+        })
+        //确定评分
+        $('.sureStar').on('click',function () {
+            if(starRating===0) {
+                alert('最低一颗星！');
+            } else {
+               alert('评分：'+(starRating.toFixed(1)+'分'))
+            }
+        })
+    })
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>控制焦点选择模块-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+.box,li {
+	padding:0;
+	margin:0;
+	list-style:none;
+}
+.box {
+	display:flex;
+	width:600px;
+	height:200px;
+	flex-wrap:wrap;
+	border:1px solid yellow;
+}
+li {
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	width:200px;
+	height:100px;
+	background:pink;
+}
+.active {
+	border:2px solid red;
+	box-sizing:border-box;
+}
+</style>
+</head>
+<body>
+<ul class="box">
+    <li class="active">1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+</ul>
+
+<script>
+ $('body').keydown(function(e) {
+     //        console.log(e.keyCode)
+     var o = $('.box').find('li').length;
+     //        console.log(o)
+     var i = $('.box').find('.active').index();
+     if (e.keyCode == 39) {
+         i += 1;
+         if (i >= o) {
+             return true;
+         }
+         $('.active').removeClass('active').next().addClass('active');
+     } else if (e.keyCode == 37) {
+         i -= 1;
+         if (i < 0) {
+             return true;
+         }
+         $('.active').removeClass('active');
+         $('li').eq(i).addClass('active');
+     } else if (e.keyCode == 38) {
+         i -= 3;
+         if (i < 0) {
+             return true;
+         }
+         var j = $('li').eq(i).index();
+         if (j === -1) {
+             return true;
+         }
+         $('.active').removeClass('active');
+         $('li').eq(i).addClass('active');
+     } else if (e.keyCode == 40) {
+         i += 3;
+         var j = $('li').eq(i).index();
+         if (j === -1) {
+             return true;
+         }
+         $('.active').removeClass('active');
+         $('li').eq(i).addClass('active');
+     } else if (e.keyCode == 13) {
+         var container = $('li').eq(i).text();
+         console.log(container)
+     }
+ })
+</script>
+
+</body>
+</html>

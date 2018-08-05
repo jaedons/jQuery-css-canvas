@@ -1,0 +1,46 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>css3线性渐变-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+ .box {
+	width:300px;
+	height:300px;
+	margin:50px auto;
+	background-image:linear-gradient(
+                    /*45deg,*/
+                    yellow,yellow 35%,red  35%,red 65%,blue 65%,blue 100%
+                )
+}
+.inner {
+	width:1000px;
+	height:100px;
+	margin:50px auto;
+	background-image:linear-gradient(
+                135deg,blue 0%,blue 25%,red  25%,red 50%,blue 50%,blue 75%,red 75%,red 100%
+            );
+	background-size:60px 60px;
+	animation:run 1s linear infinite;
+}
+@keyframes run {
+	0% {
+	}100% {
+	background-position:120px 0;
+}
+}</style>
+</head>
+<body>
+<div class="box">
+</div>
+<div class="inner">
+
+</div>
+
+<script>
+
+</script>
+
+</body>
+</html>

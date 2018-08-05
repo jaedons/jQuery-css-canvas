@@ -1,0 +1,46 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>js去空格方法-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.2.3/jquery.min.js"></script>
+<style>
+.backgroundClass {
+	background-color:red;
+}
+</style>
+</head>
+<body>
+<span class="backgroundClass" id="text1">&nbsp;&nbsp;AB&nbsp;CD&nbsp;&nbsp;EF&nbsp;&nbsp;</span>
+<br>
+<input type="button" onclick="test1()" value="点击去除前后空格">
+<br>
+<span class="backgroundClass" id="text2">&nbsp;&nbsp;A&nbsp;&nbsp;BC&nbsp;DEF&nbsp;&nbsp;</span>
+<br>
+<input type="button" onclick="test2()" value="点击去除所有空格">
+
+<script>
+function Space(str, is_global) {
+    var result;
+    result = str.replace(/(^\s+)|(\s+$)/g, "");
+    if (is_global) {
+        result = result.replace(/\s/g, "");
+    }
+    return result;
+}
+
+function test1() {
+    var text = $("#text1").text();
+    var result = Space(text, false);
+    alert("__" + result + "__");
+}
+
+function test2() {
+    var text = $("#text2").text();
+    var result = Space(text, true);
+    alert("__" + result + "__");
+}
+</script>
+
+</body>
+</html>

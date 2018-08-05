@@ -1,0 +1,63 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>发大镜效果实现-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<div id="smallImg" style="position: absolute; background:url(http://www.jq22.com/img/cs/500x500-1.png) center; background-size: cover; top: 100px; left:100px; width:200px; height:200px;">
+    <div id="smallCursor" style="position: absolute; left: 0; top: 0; display:none; width: 40px; height: 40px; background: rgba(200,198,255,0.8);"></div>
+</div>
+<div id="bigCursor" style="position: absolute; height:300px; width:300px; left: 350px; top: 10px; background: rgba(200,198,255,0.1); overflow: hidden;">
+    <img id="bigImg" style="position: absolute; left: 0px; top: 0px;" src="http://www.jq22.com/img/cs/500x500-9.png">
+</div>
+
+<script>
+$(window).load(function() {
+
+    var $smallImg = $("#smallImg"); //小图
+    var $bigImg = $("#bigImg") //大图
+    var $smallCursor = $("#smallCursor"); //小可视区域
+    var $bigCursor = $("#bigCursor"); //大可视区域
+
+    //根据比例重新计算小可视区的大小
+    //公式：  小可视区宽度/大可视区宽度 = 小图宽度/大图宽度
+    $smallCursor.width($smallImg.outerWidth() * $bigCursor.outerWidth() / 800);
+    $smallCursor.height($smallImg.outerWidth() * $bigCursor.outerWidth() / 800);
+    //由于小可视区域会隐藏，因此不能使用offsetWidth属性来计算宽度。
+    //smallCursor的边长
+    diameter = $smallCursor.outerWidth();
+    //大小可视区比例
+    var scale = $bigCursor.outerWidth() / diameter;
+    $smallImg.mousemove(function(evt) {
+        var e = evt || event;
+        var disX = e.clientX - $smallImg.offset().left - diameter / 2;
+        var disY = e.clientY - $smallImg.offset().top - diameter / 2;
+
+        var leftSide = $smallImg.offset().left + diameter / 2;
+        var topSide = $smallImg.offset().top + diameter / 2;
+
+        var rightSide = $smallImg.offset().left + $smallImg.outerWidth() - diameter / 2;
+        var downSide = $smallImg.offset().top + $smallImg.outerHeight() - diameter / 2;
+        if (e.clientX >= leftSide && e.clientX <= rightSide && e.clientY >= topSide && e.clientY <= downSide) {
+            $smallCursor.css("display", "block");
+            //小图的位置
+
+            $smallCursor.css("left", disX);
+            $smallCursor.css("top", disY);
+            //大图的位置
+            $bigImg.css("left", -disX * scale);
+            $bigImg.css("top", -disY * scale);
+        } else {
+            $smallCursor.css("display", "none");
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

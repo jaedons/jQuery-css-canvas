@@ -1,0 +1,174 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jquery增删改查数据操作-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+* {
+	margin:0;
+	padding:0;
+}
+@charset "utf-8";
+	table {
+	width:800px;
+	margin:100px auto;
+	/*height:auto;
+	*/
+}
+td,th {
+	text-align:center;
+	height:60px;
+}
+body {
+	font-family:"微软雅黑";
+	/*background:url(img/footside.jpg)no-repeat;
+	background-size:100% 100%;
+	background-attachment:fixed;
+	*/
+}
+button {
+	margin-left:40px;
+	width:100px;
+	height:30px;
+}
+button:hover {
+	color:cyan;
+}
+thead {
+	background:#b1aff4;
+}
+tbody {
+	background:#e5f4af;
+}
+tfoot {
+	background:#aff4eb;
+}
+td {
+	word-break:normal;
+}
+</style>
+</head>
+<body>
+<table cellspacing="0" border="1">
+    <thead>
+        <tr>
+            <th>全选：<input type="checkbox" class="all"></th>
+            <th>姓名：</th>
+            <th>年龄：</th>
+            <th>?操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input type="checkbox" class="itme"></td>
+            <td>张大大</td>
+            <td>李大大</td>
+            <td><button class="delay">删除</button></td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" class="itme"></td>
+            <td>习大大</td>
+            <td>刘大大</td>
+            <td><button class="delay">删除</button></td>
+        </tr>
+    </tbody>
+
+
+    <tfoot>
+        <tr>
+            <td>全选：<input type="checkbox" class="all"></td>
+            <td colspan="3">
+                <button class="off">取消全选</button>
+                <button class="del">删除所选</button>
+                <button class="reverse">反选</button>
+                <button class="add">增加</button>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<script>
+$(function() {
+    var all = $('.all');
+    var itme;
+    itme = $('.itme');
+    all.on('click', function() {
+        if (this.checked == true) {
+            itme.prop('checked', true);
+            all.prop('checked', true);
+        } else {
+            itme.prop('checked', false);
+            all.prop('checked', false);
+        }
+    })
+
+    $.each(itme, function(index, value) {
+        $(this).on('click', function() {
+            if ($('.itme:checked').length == $('.itme').length) {
+                all.prop('checked', true);
+            } else {
+                all.prop('checked', false);
+            }
+        })
+    });
+
+    var off = $('.off');
+    off.on('click', function() {
+        all.prop('checked', false);
+        itme.prop('checked', false);
+    });
+
+    var del = $('.del');
+    del.on('click', function() {
+        $('.itme:checked').parents('tr').remove();
+        if ($('.itme:checked').length == 0) {
+            all.prop('checked', false);
+        }
+    });
+
+    var day = $('.delay');
+    day.on('click', function() {
+        if ($(this).parents('tr').find('td').eq(0).find('input').get(0).checked == true) {
+            $(this).parents('tr').remove();
+        };
+        if ($('.itme:checked').length == 0) {
+            all.prop('checked', false);
+        }
+    });
+
+    var reverse = $('.reverse');
+    reverse.on('click', function() {
+        $('.itme').prop('checked', function(index, value) {
+            return !value;
+        });
+        if ($('.itme:checked').length == $('.itme').length) {
+            all.prop('checked', true);
+        } else {
+            all.prop('checked', false);
+        }
+    });
+
+    var add = $('.add');
+
+    add.on('click', function() {
+        $('tbody').append('<tr><td><input type="checkbox" class="itme"/></td><td contenteditable=true></td><td contenteditable=true></td><td><button class="delay">删除</button></td></tr>');
+    });
+
+    itme = $('.itme');
+
+    $.each(itme, function(index, value) {
+        $(this).on('click', function() {
+            if ($('.itme:checked').length == $('.itme').length) {
+                all.prop('checked', true);
+            } else {
+                all.prop('checked', false);
+            }
+        })
+    });
+
+})
+</script>
+
+</body>
+</html>

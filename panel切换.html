@@ -1,0 +1,237 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>panel切换-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+    .box {
+	display:flex;
+}
+.panel {
+	margin:0 3%;
+	border:1px solid #ddd;
+	width:20%;
+	cursor:pointer;
+	text-align:center;
+	height:400px;
+	overflow-y:auto;
+}
+.panel_detail {
+	border-bottom:1px solid #ddd;
+	padding:5% 0;
+	background:transparent;
+	transition:background .15s ease-in-out;
+}
+.panel_detail.clk {
+	background:lightblue;
+}
+.panel_detail:hover {
+	/* color:#fff;
+	*/
+      background:lightblue;
+}
+ul,li {
+	padding:0;
+}
+li {
+	list-style:none;
+}
+.hide {
+	display:none;
+}
+.exchangeCn {
+	align-self:center;
+}
+.exchangeCn li {
+	cursor:pointer;
+	border:1px solid #ddd;
+	padding:5px 10px;
+	margin:5px 0;
+}
+</style>
+</head>
+<body>
+<div class="box">
+    <div class="panel panel_all"></div>
+    <div class="exchangeCn">
+        <ul>
+            <li data-exch="g" class="cn_gt">&gt;</li>
+            <li data-exch="l" class="cn_lt">
+                &lt;</li>
+        </ul>
+    </div>
+    <div class="panel panel_add"></div>
+    <div class="hide_val">
+        <input type="hidden" name="spcodes">
+    </div>
+</div>
+
+<div>
+    <button type="button" onclick="splitData()">查看数据</button>
+</div>
+
+<script>
+   var list1 = [{
+           "id": 1,
+           "inner": "a",
+           "code": 'ars'
+       },
+       {
+           "id": 2,
+           "inner": "b",
+           "code": "back"
+       },
+       {
+           "id": 3,
+           "inner": "c",
+           "code": "caption"
+       },
+       {
+           "id": 3,
+           "inner": "d",
+           "code": "drive"
+       },
+       {
+           "id": 3,
+           "inner": "e",
+           "code": "egg"
+       },
+       {
+           "id": 3,
+           "inner": "f",
+           "code": "fly"
+       },
+       {
+           "id": 3,
+           "inner": "g",
+           "code": "garden"
+       },
+       {
+           "id": 3,
+           "inner": "h",
+           "code": "height"
+       },
+       {
+           "id": 3,
+           "inner": "i",
+           "code": "ice"
+       }
+   ]
+
+   var list2 = [{
+           "id": 2,
+           "inner": "b"
+       },
+       {
+           "id": 5,
+           "inner": "e"
+       },
+       {
+           "id": 8,
+           "inner": "h"
+       },
+       {
+           "id": 9,
+           "inner": "i"
+       }
+   ]
+
+   var strObj = 'b,e,h,i';
+   var arr = [];
+
+   //初始值
+   function loadData(list) {
+       var panel = document.getElementsByClassName('panel')[0];
+       for (var i = 0, str = ''; i < list.length; i++) {
+           arr.push(list[i].inner);
+           str += '<div class="panel_detail">' + list[i].code + '(' + list[i].inner + ')</div>';
+       }
+       panel.innerHTML = str;
+   }
+
+   //已有值
+   function splitData() {
+       var list = strObj;
+       // console.log(list);
+       list = list.split(',');
+       var main = document.getElementsByClassName('panel_all')[0];
+       var panel = document.getElementsByClassName('panel_add')[0];
+       // console.log(list);
+       var reg = /\((\w)\)/;
+       for (var i = 0; i < arr.length; i++) {
+           var elem = main.children[i];
+           var inner = elem.innerHTML;
+           inner = inner.match(reg)[1];
+           // console.log(inner);
+           for (var y = 0, str = ''; y < list.length; y++) {
+               str += '<div class="panel_detail">' + list[y] + '</div>';
+               if (list[y] == inner) {
+                   elem.className += ' hide';
+               }
+           }
+       }
+       panel.innerHTML = str;
+       setVal();
+   }
+
+   function setVal() {
+       var panel = document.getElementsByClassName('panel_add')[0].children;
+       var reg = /\((\w)\)/;
+       for (var i = 0, inner = '', str = ''; i < panel.length; i++) {
+           inner = panel[i].innerHTML;
+           if (inner.match(reg)) {
+               inner = inner.match(reg)[1];
+           }
+           str += inner + ',';
+       }
+       str = str.slice(0, str.length - 1);
+       document.querySelector('.hide_val>input').value = str;
+   }
+
+   function doSame(tar, str) { //相同操作
+       var ind = 1,
+           idx = 0;
+       if (str == 'g') {
+           ind = 0;
+           idx = 1;
+       }
+       var curr = document.querySelectorAll('.panel')[ind].children;
+       var panel = document.getElementsByClassName('panel')[idx];
+       if (curr.length > 0) {
+           for (var i = 0; i < curr.length; i++) {
+               if (curr[i].className.indexOf('clk') != -1) {
+                   curr[i].className = curr[i].className.replace(/ clk/g, '');
+                   panel.appendChild(curr[i]);
+                   i--;
+               }
+           }
+           setVal();
+       }
+       return false;
+   }
+
+   document.getElementsByClassName('box')[0].addEventListener('click', function() {
+       var e = window.event || arguments.callee.caller.arguments[0];
+       var tar = e.target || e.srcElement;
+       var str = tar.getAttribute('data-exCh');
+       if (str) {
+           console.log('切换');
+           doSame(tar, str);
+       }
+
+       if (tar.className.indexOf('clk') == -1 && tar.className.indexOf('panel_detail') != -1) {
+           tar.className += ' clk';
+           return;
+       }
+       // console.log('已存在');
+       tar.className = tar.className.replace(/ clk/g, '');
+   });
+
+   window.onload = function() {
+       loadData(list1);
+   }
+</script>
+
+</body>
+</html>

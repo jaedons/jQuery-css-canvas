@@ -1,0 +1,26 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>获取用户按下的键-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<input type="text" onkeydown="return noNumbers(event)">
+
+
+<script>
+function noNumbers(e) {
+    var keynum;
+    var keychar;
+
+    keynum = window.event ? e.keyCode : e.which;
+    keychar = String.fromCharCode(keynum);
+    alert(keynum + ':' + keychar);
+}
+</script>
+
+</body>
+</html>

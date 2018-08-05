@@ -1,0 +1,172 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>移动端仿购物网站可滑动导航栏（适用于移动端）-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+* {
+	margin:0;
+	padding:0;
+}
+li {
+	list-style:none;
+}
+::-webkit-scrollbar {
+	width:5px;
+	height:0px;
+	background-color:#fff;
+}
+.friendlj {
+	width:100%;
+	height:50px;
+	position:relative;
+	overflow-x:auto;
+	/*padding-bottom:10px;
+	*/overflow-y:hidden;
+	z-index:9;
+	background-color:#666666;
+}
+.friendlj div:nth-child(1) {
+	width:auto;
+	height:50px;
+	z-index:11;
+	position:relative;
+}
+.friendlj div ul {
+	width:auto;
+	height:50px;
+	text-align:center;
+	position:absolute;
+	left:50%;
+	z-index:11;
+}
+.friendlj div ul li {
+	float:left;
+	width:auto;
+	height:100%;
+	line-height:50px;
+	z-index:12;
+	color:#fff;
+	position:relative;
+}
+.bjk {
+	width:auto;
+	height:50px;
+	background-color:rgba(252,5,5,0.8);
+	position:fixed;
+	top:0px;
+	z-index:10;
+	left:50%;
+}
+</style>
+</head>
+<body>
+<div class="friendlj">
+    <div class="Taxis">
+        <ul>
+            <li index="1">00:00</li>
+            <li index="2">10:18</li>
+            <li index="3">12:00</li>
+            <li index="4">16:00</li>
+            <li index="5">18:00</li>
+        </ul>
+    </div>
+    <div class="bjk"></div>
+</div>
+<div>
+    <div id="showCot1" style="background-color: orange;width: 100%;height: 500px;display: none;">1</div>
+    <div id="showCot2" style="background-color: yellow;width: 100%;height: 500px;display: none;">2</div>
+    <div id="showCot3" style="background-color: green;width: 100%;height: 500px;display: none;">3</div>
+    <div id="showCot4" style="background-color: red;width: 100%;height: 500px;display: none;">4</div>
+    <div id="showCot5" style="background-color: blue;width: 100%;height: 500px;display: none;">5</div>
+</div>
+
+<script>
+$(document).ready(function() {
+    offserHeight = $(window).width();
+    Liheight = offserHeight / 5;
+    var Dwidth = offserHeight + Liheight * 4;
+    $(".friendlj div").css({
+        'width': Dwidth + 'px'
+    });
+    $(".friendlj div ul").css({
+        'width': offserHeight + 'px'
+    });
+    $(".friendlj div ul").css({
+        'margin-left': -offserHeight / 2 + 'px'
+    });
+    $(".friendlj div ul li").css("width", Liheight + 'px');
+    $(".bjk").css({
+        'width': Liheight + 'px',
+        'margin-left': -Liheight / 2 + 'px'
+    });
+    Uleft = $(".friendlj div ul").offset().left;
+    // console.log(Uleft);
+    timer = setInterval(TimeChangeD, 1000);
+    $(".Taxis ul li").click(function() {
+        clearInterval(timer);
+        var Nval = $(this).attr('index');
+        var ChangeLI = Liheight * (Nval - 1);
+        $(".friendlj").stop().animate({
+            scrollLeft: ChangeLI + 'px'
+        }, 1000);
+        $("#showCot" + Nval).show().siblings().hide();
+    });
+    $(".friendlj div ul").on("touchmove", function(e) {
+        clearInterval(timer);
+        $(".friendlj").attr("pdrun", "1");
+        $(".friendlj").scroll(function() {
+            if ($(".friendlj").attr("pdrun")) {
+                var scrollLeftValue = $(".friendlj").scrollLeft();
+                // console.log(scrollLeftValue);
+                var pdLigs = Math.ceil(scrollLeftValue / Liheight);
+                // console.log(pdLigs);
+                $(".friendlj").stop().animate({
+                    scrollLeft: pdLigs * Liheight + 'px'
+                }, 500);
+                var nowpdLigs = pdLigs + 1;
+                $("#showCot" + nowpdLigs).show().siblings().hide();
+            }
+            $(".friendlj").removeAttr('pdrun');
+        })
+    })
+})
+
+function p(s) {
+    return s < 10 ? '0' + s : s;
+}
+//获取当前时间
+function TimeChangeD() {
+    var myDate = new Date();
+    var h = myDate.getHours();
+    var m = myDate.getMinutes();
+    var nowDate = p(h) + ':' + p(m);
+    var ArrMax = [];
+    // console.log(nowDate);
+    $(".Taxis ul li").each(function() {
+        var DValue = $(this).html();
+        if (nowDate > DValue) {
+            var Idex = $(this).attr('index');
+            ArrMax.push(Idex);
+            // console.log(ChangeLI);
+        }
+    });
+    var maxval = -1;
+    for (var i = 0; i < ArrMax.length; i++) {
+        if (ArrMax[i] > maxval) {
+            maxval = ArrMax[i];
+        }
+    }
+    var ChangeLI = Liheight * (maxval - 1);
+    // console.log(ChangeLI);
+    $(".friendlj").stop().animate({
+        scrollLeft: ChangeLI + 'px'
+    });
+    $("#showCot" + maxval).show().siblings().hide();
+    // console.log(maxval);
+}
+</script>
+
+</body>
+</html>

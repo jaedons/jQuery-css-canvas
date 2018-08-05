@@ -1,0 +1,57 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>js粒子跟随鼠标移动-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<style>
+div {
+	width:10px;
+	height:10px;
+	background-color:darkmagenta;
+	position:absolute;
+	border-radius:50%;
+}
+</style>
+</head>
+<body>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+
+<script>
+window.onload = function() {
+    var divs = document.getElementsByTagName("div");
+    document.onmousemove = function() {
+        divs[0].style.left = event.clientX + "px";
+        divs[0].style.top = event.clientY + "px";
+        for (var index = divs.length - 1; index > 0; index--) {
+            divs[index].style.left = divs[index - 1].style.left;
+            divs[index].style.top = divs[index - 1].style.top;
+        }
+    }
+    document.onmouseup = function() {
+        document.onmousemove = null;
+    }
+}
+</script>
+
+</body>
+</html>

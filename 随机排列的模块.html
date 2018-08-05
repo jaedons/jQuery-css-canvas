@@ -1,0 +1,118 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>随机排列的模块-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+#board {
+	display:flex;
+	flex-wrap:wrap;
+	align-content:flex-start;
+	width:308px;
+	height:308px;
+}
+.item {
+	width:100px;
+	height:100px;
+	border:1px solid red;
+	text-align:center;
+	line-height:100px;
+	transition:all 1s;
+}
+.rotation1 {
+	animation:move 1s ease 0s;
+	/*animation-fill-mode:forwards;
+	*/
+}
+.rotation2 {
+	animation:rotation 1s ease 0s;
+}
+@keyframes move {
+	from {
+	transform:translate(0,0);
+}
+to {
+	transform:translate(400px,300px);
+}
+}@keyframes rotation {
+	from {
+	transform:rotate(0deg);
+}
+to {
+	transform:rotate(360deg);
+}
+}</style>
+</head>
+<body>
+<div id="board">
+    <div class="item">1</div>
+    <div class="item" id="id2">2</div>
+    <div class="item" id="id3">3</div>
+    <div class="item">4</div>
+    <div class="item">5</div>
+    <div class="item">6</div>
+    <div class="item">7</div>
+    <div class="item">8</div>
+    <div class="item">9</div>
+</div>
+<button id="btn">打乱</button>
+<button id="btn2">复原</button>
+
+<script>
+var initLocation = setXY();
+document.getElementById('btn').onclick = function() {
+
+    var arr = setXY().sort(() => (0.5 - Math.random())); // 生成随机数组
+    changeLocation(arr);
+
+}
+document.getElementById('btn2').onclick = function() {
+    resetLocation(initLocation);
+}
+// 获取设置单元的初始位置，左上方点的位置
+function setXY() {
+    var x = [0, 102, 204];
+    var y = [0, 102, 204];
+    var xy = [];
+    for (var i = 0; i < x.length; i++) {
+        for (var j = 0; j < y.length; j++) {
+            var a = [x[i], y[j]];
+            xy.push(a);
+        }
+    }
+    return xy;
+}
+// 随即打乱
+function changeLocation(randomLocation) {
+    // document.getElementById('board').className = 'rotation2';
+    var item = document.getElementsByClassName('item');
+    for (var i = 0; i < item.length; i++) {
+        var selector = `.item:eq(${i})`;
+        var detail = randomLocation[i];
+        // 注意此处的计算
+        var moveX = detail[0] - initLocation[i][1] + 'px';
+        var moveY = detail[1] - initLocation[i][0] + 'px';
+
+        var translate = `translate(${moveX}, ${moveY})`
+        $(selector).css("transform", translate);
+        // item[i].className = 'item rotation1';
+    }
+}
+// 复原位置
+function resetLocation(randomLocation) {
+    var item = document.getElementsByClassName('item');
+    for (var i = 0; i < item.length; i++) {
+        var selector = `.item:eq(${i})`;
+        var detail = randomLocation[i];
+        // 注意此处的计算
+        var moveX = detail[0] - initLocation[i][0] + 'px';
+        var moveY = detail[1] - initLocation[i][1] + 'px';
+        var translate = `translate(${moveX}, ${moveY})`
+        $(selector).css("transform", translate);
+    }
+}
+</script>
+
+</body>
+</html>

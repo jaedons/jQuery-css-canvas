@@ -1,0 +1,214 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery列表收缩（原创）-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+* CSS初始化 **/
+@charset "utf-8";
+	/* CSS Document */
+html,body,ul,ol,li,form,fieldset,table,td,img,div {
+	margin:0;
+	padding:0;
+	border:0;
+	box-sizing:border-box;
+}
+input,button,textarea {
+	outline:none
+}
+ul,ol,p {
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+select,input,img,select {
+	vertical-align:middle;
+}
+a {
+	text-decoration:none;
+	color:#666666;
+	margin:0;
+	padding:0;
+	font-size:14px;
+}
+img {
+	border:none;
+}
+body,html {
+	margin:0;
+	padding:0;
+	font-size:14px;
+	font-family:"微软雅黑","宋体","Times New Roman";
+	background:#eee;
+	color:#333333;
+}
+h1,h2,h3,h4,h5,h6,i {
+	font-size:14px;
+	font-weight:normal;
+	font-style:normal;
+	margin:0;
+	padding:0;
+}
+.shadow {
+	box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+.fl {
+	float:left;
+}
+.fr {
+	float:right;
+}
+.W_Center {
+	width:1200px;
+	margin:0 auto;
+}
+.indexConPd {
+	padding:0 3%;
+	box-sizing:border-box;
+}
+::-webkit-scrollbar {
+	display:none;
+}
+video {
+	background:#000;
+}
+.clearfix {
+	*zoom:1
+}
+.clearfix:after {
+	content:"";
+	display:table;
+	clear:both
+}
+.joinUs {
+	}.joinUsTop {
+	padding:20px 0;
+}
+.joinUsTop .tit {
+	font-size:24px;
+	margin:30px 0;
+	font-weight:bold;
+}
+.joinUsTop .intro {
+	line-height:2em;
+	width:70%;
+	margin-bottom:20px;
+}
+.copyRight {
+	margin-top:40px;
+}
+.joinUsList {
+	}.joinUsList li {
+	padding:36px 0;
+	border-top:1px solid #ccc;
+}
+.joinUsList li .top {
+	background:url(../images/joinUs_09.png) no-repeat right center;
+}
+.joinUsList li.current .top {
+	background:url(../images/joinUs_07.png) no-repeat right center;
+}
+.joinUsList .post {
+	font-size:24px;
+	font-weight:bold;
+	margin-bottom:10px;
+}
+.joinUsList .info {
+	font-size:16px;
+	color:#999;
+}
+.joinUsList .info span {
+	display:inline-block;
+	margin-right:10px;
+}
+.joinUsList li .content {
+	margin-top:36px;
+	display:none;
+}
+</style>
+</head>
+<body>
+<ul class="joinUsList w_980">
+    <li class="current">
+        <div class="top">
+            <div class="post">高级游戏UI设计师</div>
+            <div class="info">
+                招聘人数：<span class="num">1</span> 请发送您的简历至：
+                <span class="E-mail">***@163.com</span>
+            </div>
+        </div>
+        <div class="content">
+            职位描述：<br> 1、负责游戏界面UI设计制作；
+            <br> 2、负责游戏ICON、LOGO、图标等游戏元素设计；
+            <br> 3、按照已定界面风格的原形标准，完成各界面的延续性设计；
+            <br> 4、跟项目组策划与主美沟通，准时完成美术这边的UI工作;
+            <br> 5、1年以上游戏UI设计师工作经验。
+            <br>
+            <br> 任职资格：
+            <br> 1、精通Photoshop、Illustrator、flash等相关绘图软件；
+            <br> 2、对UI制作流程有一定了解，能够根据主美要求进行UI设计；
+            <br> 3、提供资源图时，清楚怎么能让程序能够顺利实现UI功能;
+        </div>
+    </li>
+    <li>
+        <div class="top">
+            <div class="post">高级游戏UI设计师</div>
+            <div class="info">
+                招聘人数：<span class="num">1</span> 请发送您的简历至：
+                 <span class="E-mail">***@163.com</span>
+            </div>
+        </div>
+        <div class="content">
+            职位描述：<br> 1、负责游戏界面UI设计制作；
+            <br> 2、负责游戏ICON、LOGO、图标等游戏元素设计；
+            <br> 3、按照已定界面风格的原形标准，完成各界面的延续性设计；
+            <br> 4、跟项目组策划与主美沟通，准时完成美术这边的UI工作;
+            <br> 5、1年以上游戏UI设计师工作经验。
+            <br>
+            <br> 任职资格：
+            <br> 1、精通Photoshop、Illustrator、flash等相关绘图软件；
+            <br> 2、对UI制作流程有一定了解，能够根据主美要求进行UI设计；
+            <br> 3、提供资源图时，清楚怎么能让程序能够顺利实现UI功能;
+        </div>
+    </li>
+    <li>
+        <div class="top">
+            <div class="post">高级游戏UI设计师</div>
+            <div class="info">
+                招聘人数：<span class="num">1</span> 请发送您的简历至：
+                 <span class="E-mail">***@163.com</span>
+            </div>
+        </div>
+        <div class="content">
+            职位描述：<br> 1、负责游戏界面UI设计制作；
+            <br> 2、负责游戏ICON、LOGO、图标等游戏元素设计；
+            <br> 3、按照已定界面风格的原形标准，完成各界面的延续性设计；
+            <br> 4、跟项目组策划与主美沟通，准时完成美术这边的UI工作;
+            <br> 5、1年以上游戏UI设计师工作经验。
+            <br>
+            <br> 任职资格：
+            <br> 1、精通Photoshop、Illustrator、flash等相关绘图软件；
+            <br> 2、对UI制作流程有一定了解，能够根据主美要求进行UI设计；
+            <br> 3、提供资源图时，清楚怎么能让程序能够顺利实现UI功能;
+        </div>
+    </li>
+</ul>
+
+<script>
+$(function() {
+    $(".joinUsList li.current .content").slideDown();
+    $('.joinUsList li .top').click(function() {
+        if ($(this).siblings('.content').is(":hidden")) {
+            $(this).parent().addClass('current').siblings().removeClass("current");
+        } else {
+            $(this).parent().removeClass('current');
+        }
+        $(".joinUsList li .content").slideUp();
+        $(".joinUsList li.current .content").slideDown();
+    })
+})
+</script>
+
+</body>
+</html>

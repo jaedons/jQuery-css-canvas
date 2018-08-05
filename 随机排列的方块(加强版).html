@@ -1,0 +1,115 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>随机排列的方块(加强版)-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<style>
+#board {
+	display:flex;
+	flex-wrap:wrap;
+	/*align-content:flex-start;
+	*/
+}
+.item {
+	text-align:center;
+	transition:all 1s;
+}
+</style>
+</head>
+<body>
+<div id="board">
+</div>
+<button id="btn">打乱</button>
+<button id="btn2">复原</button>
+
+<script>
+// 修改 row 即可改变模块数量，其他代码不需修改，仍可运行；
+var width = 50; //单元模块宽
+var row = 9; //行数
+var border = 0; //单元模块边宽和
+var totalWidth = (width + border) * row;
+var div = '';
+for (var i = 0; i < row * row; i++) {
+    div += `<div class="item" style="background-color: ${color()}">${i + 1}</div>`;
+}
+$('#board').css({
+    'width': totalWidth + 'px',
+    'height': totalWidth + 'px',
+})
+$('#board').append(div);
+$('.item').css({
+    'width': width + 'px',
+    'height': width + 'px',
+    'line-height': width + 'px',
+})
+var initLocation = setXY(width, row, border);
+var initLocation2 = setXY(width, row, border);
+document.getElementById('btn').onclick = function() {
+    // console.time();
+    var arr = initLocation2.sort(() => (0.5 - Math.random())); // 生成随机数组
+    changeLocation(arr);
+    // console.timeEnd();
+}
+document.getElementById('btn2').onclick = function() {
+    resetLocation(initLocation);
+}
+// 获取设置单元的初始位置，左上方点的位置
+function setXY(width, row, border) {
+    var width = width; //单元模块宽
+    var row = row; //行数
+    var border = border; //单元模块边宽和
+    var width_border = width + border;
+    var x = [];
+    var y = [];
+    var xy = [];
+    for (var i = 0; i < row; i++) {
+        x[i] = width_border * i;
+        for (var j = 0; j < row; j++) {
+            y[j] = width_border * j;
+            var a = [x[i], y[j]];
+            xy.push(a);
+        }
+    }
+    return xy;
+}
+// 随即打乱
+function changeLocation(location) {
+    // $('#board').toggleClass('rotation');
+
+    var item = document.getElementsByClassName('item');
+    for (var i = 0; i < item.length; i++) {
+        var selector = `.item:eq(${i})`;
+        // $(selector).toggleClass('rotation');
+        var detail = location[i];
+        // 注意此处的计算
+        var moveX = detail[0] - initLocation[i][1] + 'px';
+        var moveY = detail[1] - initLocation[i][0] + 'px';
+
+        var translate = `translate(${moveX}, ${moveY})`
+        $(selector).css("transform", translate);
+    }
+}
+// 复原位置
+function resetLocation(location) {
+    var item = document.getElementsByClassName('item');
+    for (var i = 0; i < item.length; i++) {
+        var selector = `.item:eq(${i})`;
+        var detail = location[i];
+        // 注意此处的计算
+        var moveX = detail[0] - initLocation[i][0] + 'px';
+        var moveY = detail[1] - initLocation[i][1] + 'px';
+        var translate = `translate(${moveX}, ${moveY})`
+        $(selector).css("transform", translate);
+    }
+}
+// 随机颜色
+function color() {
+    return "#" + (function(color) {
+        return new Array(7 - color.length).join("0") + color;
+    })((Math.random() * 0x1000000 << 0).toString(16))
+}
+</script>
+
+</body>
+</html>

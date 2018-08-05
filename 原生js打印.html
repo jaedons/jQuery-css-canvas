@@ -1,0 +1,48 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>原生js打印-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.2.3/jquery.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+<p>1不需要打印的地方</p>
+<p>2这里不要打印啊</p>
+
+<h1>打印标题</h1>
+<p>打印内容~~</p>
+
+<button type="button" onclick="doPrint1()">打印方法1</button>
+<button type="button" onclick="doPrint2()">打印方法2</button>
+<p>不打印的地方啊哈哈哈哈</p>
+<p>2</p>
+
+<script>
+//第一种方式
+function doPrint1() {
+    bdhtml = window.document.body.innerHTML;
+    sprnstr = "<!--startprint-->";
+    eprnstr = "<!--endprint-->";
+    prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17);
+    prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+    window.document.body.innerHTML = prnhtml;
+    window.print();
+}
+
+//第二种方式
+function doPrint2() {
+    bdhtml = window.document.body.innerHTML;
+    sprnstr = "<!--startprint-->";
+    eprnstr = "<!--endprint-->";
+    prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17);
+    prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+    window.document.body.innerHTML = prnhtml;
+    document.execCommand("print")
+
+} /*  */
+</script>
+
+</body>
+</html>

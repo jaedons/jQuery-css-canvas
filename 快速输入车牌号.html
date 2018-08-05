@@ -1,0 +1,210 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>快速输入车牌号-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<style>
+#key1,#key2 {
+	border:solid hsla(213,13%,83%,1.00) 1px;
+	margin-top:10px;
+	background-color:hsla(213,13%,83%,1.00);
+}
+input {
+	vertical-align:middle;
+	width:60px;
+	height:40px;
+	font-size:20px;
+	text-align:center;
+	border-radius:5px;
+}
+#text1 {
+	align-self:center;
+}
+button {
+	border-radius:5px;
+	background-color:white;
+	margin-top:2px;
+	width:75px;
+	height:40px;
+	font-size:20px;
+}
+#btn2 {
+	background-color:hsla(214,10%,70%,1.00);
+}
+</style>
+</head>
+<body>
+<div id="text1" align="center">
+    <p style="font-size: 30px;"><strong>点击下面任意方框</strong></p>
+    <input type="text" readonly="readonly" id="txt1">
+    <input type="text" readonly="readonly" id="txt2">
+    <input type="text" readonly="readonly" id="txt3">
+    <input type="text" readonly="readonly" id="txt4">
+    <input type="text" readonly="readonly" id="txt5">
+    <input type="text" readonly="readonly" id="txt6">
+    <input type="text" readonly="readonly" id="txt7">
+</div>
+<div id="key1" align="center" style="display: none">
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">京</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">沪</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">浙</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">苏</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">粤</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">鲁</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">晋</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">冀</button><br>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">豫</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">川</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">渝</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">辽</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">吉</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">黑</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">皖</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">鄂</button><br>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">津</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">贵</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">云</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">桂</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">琼</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">青</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">新</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">藏</button><br>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">蒙</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">宁</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">甘</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">陕</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">闽</button>
+    <button class="bt" onmousedown="mDown(this)" onmouseup="mUp(this)">赣</button>
+    <button id="btn1" onmousedown="mDown(this)" onmouseup="mUp(this)">清空</button>
+    <button id="btn2" onmousedown="mDown(this)" onmouseup="mUp(this)">关闭</button>
+</div>
+<div id="key2" align="center" style="display: none">
+    <div id="key3">
+        <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">1</button>
+        <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">2</button>
+        <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">3</button>
+        <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">4</button>
+        <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">5</button>
+        <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">6</button>
+        <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">7</button>
+        <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">8</button>
+        <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">9</button>
+        <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">0</button><br>
+    </div>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">Q</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">W</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">E</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">R</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">T</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">Y</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">U</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">P</button><br>
+
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">A</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">S</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">D</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">F</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">G</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">H</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">J</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">K</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">L</button><br>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">Z</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">X</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">C</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">V</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">B</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">N</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">M</button>
+    <button class="bt1" onmousedown="mDown(this)" onmouseup="mUp(this)">C</button>
+    <button id="btn3" onmousedown="mDown(this)" onmouseup="mUp(this)">del</button>
+    <button id="btn4" onmousedown="mDown(this)" onmouseup="mUp(this)">OK</button>
+
+</div>
+
+<script>
+$(document).ready(function() {
+    var a = $("#txt1");
+    $("#txt1").click(function() {
+        $("#key1").show();
+        $("#key2").hide();
+    });
+    $("#txt2,#txt3,#txt4,#txt5,#txt6,#txt7").click(function() {
+        if (!$("#txt1").val()) {
+            $("#key1").show();
+            $("#key2").hide();
+        } else {
+            $("#key1").hide();
+            $("#key2").show();
+        }
+    });
+    $(".bt").click(function() {
+        $("#txt1").val($(this).html());
+        $("#key1").hide();
+        $("#key2").show();
+        $("#txt2").val(null);
+        $("#txt3").val(null);
+        $("#txt4").val(null);
+        $("#txt5").val(null);
+        $("#txt6").val(null);
+        $("#txt7").val(null);
+        a = $("#txt1");
+    });
+
+    $(".bt1").click(function() {
+        a = a.next();
+        a.val($(this).html());
+        if ($("#txt2").val() < 10) {
+            alert("车牌第二位必须是字母！");
+            $("#txt2").val(null);
+            a = $("#txt1");
+        }
+        if ($("#txt7").val()) {
+            a = $("#txt7");
+        }
+    });
+    //清空
+    $("#btn1").click(function() {
+        a = $("#txt1");
+        $("#txt1").val(null);
+        $("#txt2").val(null);
+        $("#txt3").val(null);
+        $("#txt4").val(null);
+        $("#txt5").val(null);
+        $("#txt6").val(null);
+        $("#txt7").val(null);
+    });
+    //关闭
+    $("#btn2").click(function() {
+        $("#key1,#key2").hide();
+    });
+    //del
+    $("#btn3").click(function() {
+        a.val(null);
+        a = a.prev();
+        if (!$("#txt1").val()) {
+            $("#key1").show();
+            $("#key2").hide();
+        }
+    });
+    //ok
+    $("#btn4").click(function() {
+        $("#key1,#key2").hide();
+    });
+    //改变button颜色
+
+
+});
+
+function mDown(obj) {
+    obj.style.backgroundColor = "hsla(207,85%,63%,1.00)";
+}
+
+function mUp(obj) {
+    obj.style.backgroundColor = "white";
+}
+</script>
+
+</body>
+</html>

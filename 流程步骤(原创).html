@@ -1,0 +1,104 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>流程步骤(原创)-jq22.com</title>
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<style>
+.process {
+	text-align:center;
+}
+ul li {
+	list-style:none;
+	width:100px;
+	height:2rem;
+	line-height:2rem;
+	text-align:center;
+	border:1px solid #E8E8E8;
+	display:inline-block;
+	margin:5px;
+	border-radius:20px;
+}
+.actions {
+	background-color:#ffe48d;
+}
+.action {
+	background-color:#ffd716;
+}
+.nextLast {
+	width:100%;
+	text-align:center;
+}
+.nextLast button {
+	width:100px;
+	height:2rem;
+	cursor:pointer;
+	list-style-type:none;
+	border:1px solid #E8E8E8;
+	background-color:transparent;
+}
+.content {
+	margin:0 auto;
+}
+.content > div {
+	display:none;
+}
+.content .wrap {
+	display:block;
+}
+.wraps {
+	margin:0 auto;
+	width:1000px;
+	height:350px;
+	border:1px solid #E8E8E8;
+	text-align:center;
+}
+</style>
+</head>
+<body>
+<div class="process">
+    <ul class="step-case" id="step">
+        <li class="action"><span>第1步</span></li>
+        <li class=""><span>第2步</span></li>
+        <li class=""><span>第3步</span></li>
+        <li class=""><span>第4步</span></li>
+        <li class=""><span>第5步</span></li>
+        <li class=""><span>第6步</span></li>
+        <li class=""><span>第7步</span></li>
+        <li class=""><span>第8步</span></li>
+    </ul>
+</div>
+<div class="nextLast">
+    <button id="lastStep">上一步</button>
+    <button id="nextStep">下一步</button>
+</div>
+
+<script>
+$(function() {
+    process("#step");
+
+    function process(pa) {
+        var li = $("#step li");
+        $("#nextStep").click(function() {
+            var index = $(pa + " .action").index();
+            var z = $("#step li").length;
+            var i = index + 1;
+            if (index < z - 1) {
+                $(li[index]).removeClass("action").addClass("actions");
+                $(li[i]).addClass("action");
+            }
+        });
+        $("#lastStep").click(function() {
+            var index = $(pa + " .action").index();
+            var i = index - 1;
+            if (index > 0) {
+                $(li[index]).removeClass("action").removeClass("actions");
+                $(li[i]).addClass("action");
+            }
+        })
+    }
+});
+</script>
+
+</body>
+</html>
